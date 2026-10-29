@@ -1,22 +1,110 @@
-import CoreGraphics
-import CoreText
 import Foundation
 
-#if os(macOS) && !targetEnvironment(macCatalyst)
-import AppKit
+// MARK: - Vector Path
 
-private func linePlatformFont(from ctFont: CTFont) -> NSFont {
-    ctFont as NSFont
-}
-#elseif canImport(UIKit)
-import UIKit
+/// 2D vector path for rules and decorations.
+public struct MathPath: Sendable, Equatable {
+    public enum Element: Sendable, Equatable {
+        case moveTo(CGPoint)
+        case lineTo(CGPoint)
+        case quadTo(CGPoint, CGPoint)
+        case closeSubpath
+    }
 
-private func linePlatformFont(from ctFont: CTFont) -> UIFont {
-    ctFont as UIFont
+    public var elements: [Element]
+
+    public init(elements: [Element] = []) {
+        self.elements = elements
+    }
+
+    public init(rect: CGRect) {
+        self.elements = [
+            .moveTo(CGPoint(x: rect.minX, y: rect.minY)),
+            .lineTo(CGPoint(x: rect.maxX, y: rect.minY)),
+            .lineTo(CGPoint(x: rect.maxX, y: rect.maxY)),
+            .lineTo(CGPoint(x: rect.minX, y: rect.maxY)),
+            .closeSubpath,
+        ]
+    }
+
+    public mutating func move(to p: CGPoint) {
+        elements.append(.moveTo(p))
+    }
+
+    public mutating func addLine(to p: CGPoint) {
+        elements.append(.lineTo(p))
+    }
+
+    public mutating func addQuadCurve(to p: CGPoint, control c: CGPoint) {
+        elements.append(.quadTo(c, p))
+    }
+
+    public mutating func closeSubpath() {
+        elements.append(.closeSubpath)
+    }
+
+    public mutating func addPath(_ other: MathPath) {
+        elements.append(contentsOf: other.elements)
+    }
+
+    public var boundingBox: CGRect {
+        boundingBoxOfPath
+    }
+
+    public var boundingBoxOfPath: CGRect {
+        var minX = CGFloat.infinity
+        var minY = CGFloat.infinity
+        var maxX = -CGFloat.infinity
+        var maxY = -CGFloat.infinity
+        var hasPoint = false
+        var curr = CGPoint.zero
+
+        func include(_ p: CGPoint) {
+            hasPoint = true
+            minX = min(minX, p.x)
+            minY = min(minY, p.y)
+            maxX = max(maxX, p.x)
+            maxY = max(maxY, p.y)
+        }
+
+        for el in elements {
+            switch el {
+            case .moveTo(let p), .lineTo(let p):
+                include(p)
+                curr = p
+            case .quadTo(let c, let p):
+                include(p)
+                let dx = curr.x - 2 * c.x + p.x
+                if abs(dx) > 1e-9 {
+                    let tx = (curr.x - c.x) / dx
+                    if tx > 0 && tx < 1 {
+                        let u = 1 - tx
+                        let x = u * u * curr.x + 2 * u * tx * c.x + tx * tx * p.x
+                        minX = min(minX, x)
+                        maxX = max(maxX, x)
+                    }
+                }
+                let dy = curr.y - 2 * c.y + p.y
+                if abs(dy) > 1e-9 {
+                    let ty = (curr.y - c.y) / dy
+                    if ty > 0 && ty < 1 {
+                        let u = 1 - ty
+                        let y = u * u * curr.y + 2 * u * ty * c.y + ty * ty * p.y
+                        minY = min(minY, y)
+                        maxY = max(maxY, y)
+                    }
+                }
+                curr = p
+            case .closeSubpath:
+                break
+            }
+        }
+        return hasPoint ? CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY) : .zero
+    }
 }
-#endif
 
 // MARK: - Font metrics
+
 /// TeX font metrics and related constants.
 public struct FontMetrics {
     /// Font metrics parameters from TeX (sigmas and xis).
@@ -53,7 +141,6 @@ public struct FontMetrics {
         public let ptPerEm: CGFloat
         public let doubleRuleSep: CGFloat
 
-        /// Reference `options.fontMetrics().cssEmPerMu` — `quad / 18` (see `fontMetrics.js`).
         public var cssEmPerMu: CGFloat { quad / 18.0 }
     }
 
@@ -163,7 +250,6 @@ public struct FontMetrics {
     )
 
     /// Get appropriate font metrics for a given size.
-    /// Matches reference `getGlobalMetrics` / `fontMetrics.js` sizeIndex rules on **current** `fontSize` (pt).
     public static func getMetrics(for size: CGFloat) -> MetricsSet {
         if size >= 5.0 {
             return textstyle
@@ -174,13 +260,13 @@ public struct FontMetrics {
         }
     }
 
-    /// Reference `options.fontMetrics()` for a given style’s **current** font size (after `withStyle` scaling).
     public static func getMetrics(for options: FormulaKit.Options) -> MetricsSet {
         getMetrics(for: options.fontSize)
     }
 }
 
 // MARK: - Math text runs & composite layout
+
 /// One glyph span positioned in layout space (baseline origin, **math y-up**: positive y is above baseline).
 public struct MathTextRun: Sendable, Equatable {
     public let string: String
@@ -188,9 +274,9 @@ public struct MathTextRun: Sendable, Equatable {
     public let fontName: String
     public let fontSize: CGFloat
     public let baselineOrigin: CGPoint
-    /// When true, `\text{…}`-style metrics: prefer the text face over the math face on macOS (see ``MathFont``).
+    /// When true, `\text{…}`-style metrics: prefer the text face over the math face.
     public let metricsTextMode: Bool
-    /// STIX Two Math OpenType math delimiter master (e.g. ``parenleft.s5``) via ``CTGlyphInfo``; `nil` = cmap glyph for `string`.
+    /// OpenType math glyph name (e.g. ``parenleft.s5``); `nil` = cmap glyph for `string`.
     public let openTypeMathGlyphName: String?
 
     public init(
@@ -211,12 +297,12 @@ public struct MathTextRun: Sendable, Equatable {
 }
 
 /// System-text + vector decorations, analogous to HTML math output (text spans + SVG/rules).
-public struct MathCompositeRender {
+public struct MathCompositeRender: Sendable, Equatable {
     /// Rules, braces, and other non-glyph geometry. Empty if the expression is symbols only.
-    public let decorationPath: CGPath
+    public let decorationPath: MathPath
     public let textRuns: [MathTextRun]
 
-    public init(decorationPath: CGPath, textRuns: [MathTextRun]) {
+    public init(decorationPath: MathPath, textRuns: [MathTextRun]) {
         self.decorationPath = decorationPath
         self.textRuns = textRuns
     }
@@ -225,18 +311,17 @@ public struct MathCompositeRender {
 /// Result of ``FormulaKit/render(_:options:)``: drawable content plus root layout metrics (`Box`).
 public struct MathCompositeLayout {
     /// Rules, braces, and other non-glyph geometry.
-    public let decorationPath: CGPath
+    public let decorationPath: MathPath
     public let textRuns: [MathTextRun]
     /// Root layout box (width, height above baseline, depth below).
     public let rootBox: Box
-    /// Per-render cache for glyph measurement and symbol boxes during layout. Not needed when resolving ``CTFont`` for drawing (see ``SymbolNode/ctFontForMathGlyph(fontName:character:fontSize:metricsTextMode:mathFont:)``).
+    /// Per-render cache for glyph measurement and symbol boxes during layout.
     public let symbolRenderScratch: SymbolRenderScratch?
-
-    /// Same ``FormulaKit/Options/mathFont`` used to build this layout; required when resolving ``CTFont`` for ``textRuns``.
+    /// Same ``FormulaKit/Options/mathFont`` used to build this layout.
     public let mathFont: MathFontIdentifier
 
     public init(
-        decorationPath: CGPath,
+        decorationPath: MathPath,
         textRuns: [MathTextRun],
         rootBox: Box,
         symbolRenderScratch: SymbolRenderScratch? = nil,
@@ -252,52 +337,5 @@ public struct MathCompositeLayout {
     /// Same path and runs as ``MathCompositeRender`` for APIs that expect that shape.
     public var composite: MathCompositeRender {
         MathCompositeRender(decorationPath: decorationPath, textRuns: textRuns)
-    }
-
-    /// Fills ``decorationPath`` then draws ``textRuns`` with Core Text.
-    ///
-    /// **Coordinate system:** math layout space (y up), same as ``textRuns`` / ``rootBox`` — set the context
-    /// transform (centering, scaling) before calling.
-    #if os(macOS) && !targetEnvironment(macCatalyst)
-    public func drawMath(in cgContext: CGContext, textColor: NSColor = .black) {
-        drawMathImpl(in: cgContext, textCGColor: textColor.cgColor)
-    }
-    #elseif canImport(UIKit)
-    public func drawMath(in cgContext: CGContext, textColor: UIColor = .black) {
-        drawMathImpl(in: cgContext, textCGColor: textColor.cgColor)
-    }
-    #endif
-
-    private func drawMathImpl(in cgContext: CGContext, textCGColor: CGColor) {
-        cgContext.saveGState()
-        defer { cgContext.restoreGState() }
-
-        cgContext.setFillColor(textCGColor)
-        cgContext.addPath(decorationPath)
-        cgContext.fillPath()
-
-        for run in textRuns {
-            let ctFont = SymbolNode.ctFontForMathGlyph(
-                fontName: run.fontName,
-                character: run.string,
-                fontSize: run.fontSize,
-                metricsTextMode: run.metricsTextMode,
-                mathFont: mathFont
-            )
-            var attrs: [NSAttributedString.Key: Any] = [
-                .font: linePlatformFont(from: ctFont),
-                kCTForegroundColorAttributeName as NSAttributedString.Key: textCGColor,
-            ]
-            if let gn = run.openTypeMathGlyphName,
-                let glyphInfo = CTGlyphInfoCreateWithGlyphName(gn as CFString, ctFont, run.string as CFString)
-            {
-                attrs[kCTGlyphInfoAttributeName as NSAttributedString.Key] = glyphInfo
-            }
-            let line = CTLineCreateWithAttributedString(
-                NSAttributedString(string: run.string, attributes: attrs) as CFAttributedString
-            )
-            cgContext.textPosition = CGPoint(x: run.baselineOrigin.x, y: run.baselineOrigin.y)
-            CTLineDraw(line, cgContext)
-        }
     }
 }

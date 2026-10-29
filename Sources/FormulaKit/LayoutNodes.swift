@@ -1,4 +1,3 @@
-import CoreGraphics
 import Foundation
 
 // MARK: - AtomType
@@ -64,7 +63,7 @@ public protocol LayoutNode {
 
     /// Geometry that is not drawn as positioned text (fraction bars, `\sqrt` rules, braces, etc.).
     /// Glyph symbols are omitted; use ``collectTextRuns(at:options:)`` for those.
-    func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath
+    func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath
 
     /// Glyph spans for system/Core Text drawing at the given baseline origins (math y-up).
     func collectTextRuns(at origin: CGPoint, options: FormulaKit.Options) -> [MathTextRun]
@@ -72,8 +71,8 @@ public protocol LayoutNode {
 
 extension LayoutNode {
     /// Default: no vector ink in this node.
-    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath {
-        CGMutablePath()
+    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
+        MathPath()
     }
 
     /// Default: no text in this node.
@@ -84,8 +83,8 @@ extension LayoutNode {
 
 /// Extension to provide default rendering for a sequence of nodes.
 extension Array where Element == LayoutNode {
-    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath {
-        let path = CGMutablePath()
+    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
+        var path = MathPath()
         var currentOrigin = origin
         for node in self {
             let box = node.getBox(options: options)
@@ -144,20 +143,30 @@ public struct RuleNode: LayoutNode {
     /// Depth of the rule.
     public let depth: CGFloat
 
-    public init(width: CGFloat, height: CGFloat, depth: CGFloat = 0, type: AtomType = .mord) {
+    /// Semantic role of the rule for font-specific rendering.
+    public let role: MathRuleRole
+
+    public init(
+        width: CGFloat,
+        height: CGFloat,
+        depth: CGFloat = 0,
+        type: AtomType = .mord,
+        role: MathRuleRole = .horizontalLine
+    ) {
         self.width = width
         self.height = height
         self.depth = depth
         self.type = type
+        self.role = role
     }
 
     public func getBox(options: FormulaKit.Options) -> Box {
         return Box(width: width, height: height, depth: depth)
     }
 
-    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath {
+    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
         let rect = CGRect(x: origin.x, y: origin.y - depth, width: width, height: height + depth)
-        return CGPath(rect: rect, transform: nil)
+        return options.resolvedMathFont.renderRulePath(rect: rect, role: role, options: options)
     }
 }
 
@@ -198,7 +207,7 @@ public struct SmashNode: LayoutNode {
         return Box(width: b.width, height: 0, depth: 0, italicCorrection: b.italicCorrection)
     }
 
-    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath {
+    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
         content.renderDecoration(at: origin, options: options)
     }
 
@@ -241,14 +250,14 @@ public struct HorizontalBox: LayoutNode {
         }
 
         // `\tanh`, `\sin`, `\operatorname{…}` are `.mop` boxes of upright letters. Each child may still
-        // report Core Text “italic correction” from serifs; that must not kern the whole operator away
+        // report italic correction from serifs; that must not kern the whole operator away
         // from the following delimiter (e.g. `\tanh(z)` vs `\mathcal{N}(…)`).
         let outgoingItalic: CGFloat = (type == .mop) ? 0 : lastItalicCorrection
         return Box(width: width, height: height, depth: depth, italicCorrection: outgoingItalic)
     }
 
-    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath {
-        let path = CGMutablePath()
+    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
+        var path = MathPath()
         var currentOrigin = origin
         for child in children {
             let childBox = child.getBox(options: options)
@@ -347,21 +356,17 @@ public struct VerticalBox: LayoutNode {
                 depth = -minPos
             }
         default:
-            // Simplified fallback
             for box in elementBoxes {
                 width = max(width, box.width)
                 height += box.totalHeight
             }
         }
 
-        // HorizontalBox uses children.last.italicCorrection, we do same if appropriate
-        // but VerticalBox usually doesn't have italic correction unless it's a wrapper.
-
         return Box(width: width, height: height, depth: depth)
     }
 
-    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> CGPath {
-        let path = CGMutablePath()
+    public func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
+        var path = MathPath()
         let elementBoxes = elements.map { $0.node.getBox(options: options) }
         switch position {
         case .individualShift:
@@ -418,7 +423,6 @@ public struct BraceNode: LayoutNode {
     public let fontSize: CGFloat
     public let mathFont: MathFontIdentifier
 
-    /// Reference renderer image-metrics brace `minWidth` (em).
     public static let minWidthEm: CGFloat = 1.6
 
     public init(isOver: Bool, targetWidth: CGFloat, fontSize: CGFloat, mathFont: MathFontIdentifier = .stix) {
@@ -456,7 +460,7 @@ public struct BraceNode: LayoutNode {
         ]
     }
 
-    public func renderDecoration(at _: CGPoint, options _: FormulaKit.Options) -> CGPath {
-        CGMutablePath()
+    public func renderDecoration(at _: CGPoint, options _: FormulaKit.Options) -> MathPath {
+        MathPath()
     }
 }

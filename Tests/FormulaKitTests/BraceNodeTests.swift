@@ -1,9 +1,8 @@
-import CoreGraphics
+import Foundation
 import XCTest
 
 @testable import FormulaKit
 
-/// Layout and ink metrics for horizontal braces (OpenType STIX masters or reference `svgGeometry.js` paths).
 final class BraceNodeTests: XCTestCase {
     func testUnderbraceLayoutNonEmpty() {
         let node = BraceNode(isOver: false, targetWidth: 200, fontSize: 16)
@@ -12,7 +11,6 @@ final class BraceNodeTests: XCTestCase {
         XCTAssertGreaterThan(box.height + box.depth, 0)
     }
 
-    /// STIX Two Math ships ``uni23DF``…``.s5``; when installed, `\underbrace` should emit a text run instead of only vector ink.
     func testUnderbraceUsesOpenTypeGlyphWhenSTIXAvailable() throws {
         guard STIX.isPrimaryMathFontAvailable(forFontSize: 16) else { return }
         let layout = try FormulaKit.render(#"\underbrace{ab}_{x}"#)

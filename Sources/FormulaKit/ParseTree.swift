@@ -64,6 +64,7 @@ public struct MathSymbols {
         "wedge": "∧", "vee": "∨", "land": "∧", "lor": "∨", "cap": "∩", "cup": "∪",
         "uplus": "⊎", "sqcap": "⊓", "sqcup": "⊔", "ominus": "⊖", "bigcirc": "◯",
         "wr": "≀", "amalg": "⨿", "And": "&", "oplus": "⊕", "otimes": "⊗",
+        "setminus": "∖", "smallsetminus": "∖",
 
         // Relation operators
         "approx": "≈", "equiv": "≡", "propto": "∝", "ne": "≠", "neq": "≠",
@@ -79,7 +80,7 @@ public struct MathSymbols {
         "colon": "\u{2236}",
         "ldots": "\u{2026}", "cdots": "\u{22EF}", "vdots": "\u{22EE}", "ddots": "\u{22F1}",
 
-        // Arrows (reference `macros.js`: `\to`/`\gets` are aliases of `\rightarrow`/`\leftarrow`)
+        // Arrows
         "leftarrow": "←", "Leftarrow": "⇐", "rightarrow": "→", "Rightarrow": "⇒",
         "to": "→", "gets": "←",
         "leftrightarrow": "↔", "Leftrightarrow": "⇔", "uparrow": "↑", "Uparrow": "⇑",
@@ -103,7 +104,7 @@ public struct MathSymbols {
         "i": "ı", "j": "ȷ",
 
         // Operators with limits
-        "sum": "∑", "prod": "∏", "coprod": "∐", "int": "∫",
+        "sum": "∑", "prod": "∏", "coprod": "∐", "int": "∫", "oint": "∮", "iint": "∬", "iiint": "∭",
 
         // Common functions
         "sin": "sin", "cos": "cos", "tan": "tan", "cot": "cot", "sec": "sec", "csc": "csc",
@@ -411,7 +412,6 @@ public struct Parser {
 
         if start == position {
             if !isAtEnd {
-                // Reference `macros.js`: `\,` `\!` `\:` `\;` `\>` as `\tmspace` / `\mskip` (mu-based glue).
                 switch input[position] {
                 case ",":
                     advance()
@@ -844,11 +844,8 @@ public struct Parser {
     }
 
     private mutating func parseSymbol() throws -> ParseNode {
-        let start = position
-        while !isAtEnd && (isLetter(input[position]) || isDigit(input[position])) {
-            advance()
-        }
-        let s = String(input[start..<position])
+        let s = String(input[position])
+        advance()
         return ParseNode(type: .symbol, value: s)
     }
 

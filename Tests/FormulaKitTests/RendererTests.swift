@@ -2,8 +2,6 @@ import XCTest
 
 @testable import FormulaKit
 
-/// Swift analogue of the reference JS test harness `expect`…`.toBuild()` (`test/setup.js` + parser spec tests):
-/// if the reference stack can build HTML for the expression, FormulaKit should produce non-empty drawable output.
 final class RendererTests: XCTestCase {
 
     private let scriptSmokeExpressions = [

@@ -1,8 +1,13 @@
-import CoreText
 import Foundation
 
 /// Namespace for math font registration and resolution (see ``MathFontRegistry``).
 public enum MathFont {
+    /// Active font measurement backend.
+    public static var backend: any MathFontBackend {
+        get { MathFontRegistry.shared.backend }
+        set { MathFontRegistry.shared.backend = newValue }
+    }
+
     /// Registers or replaces a provider. Use a unique ``MathFontIdentifier`` per backend.
     public static func register(_ provider: some MathFontProviding) {
         MathFontRegistry.shared.register(provider)

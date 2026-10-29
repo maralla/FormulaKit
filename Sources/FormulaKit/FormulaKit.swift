@@ -1,4 +1,3 @@
-import CoreGraphics
 import Foundation
 
 /// FormulaKit is a Swift TeX math typesetting library (layout and rendering in native code).
@@ -93,7 +92,7 @@ public struct FormulaKit {
         /// The current font size.
         public var fontSize: CGFloat
 
-        /// When non-nil, ``Renderer`` reuses this for one render to dedupe glyph measurement and symbol boxes (``CTFont`` uses a process-wide cache in ``SymbolNode``).
+        /// When non-nil, ``Renderer`` reuses this for one render to dedupe glyph measurement and symbol boxes.
         /// Leave nil to let ``Renderer`` allocate a fresh ``SymbolRenderScratch`` automatically.
         public var symbolRenderScratch: SymbolRenderScratch?
 
@@ -169,7 +168,7 @@ public struct FormulaKit {
         }
     }
 
-    /// Render a LaTeX math expression: Core Text runs for glyphs plus a vector path for rules, braces, etc.,
+    /// Render a LaTeX math expression: text runs for glyphs plus a vector path for rules, braces, etc.,
     /// and the root ``Box`` for sizing—built in one layout pass.
     /// - Parameters:
     ///   - expression: The LaTeX math expression to render.
@@ -182,7 +181,7 @@ public struct FormulaKit {
     ) throws -> MathCompositeLayout {
         if expression.isEmpty {
             return MathCompositeLayout(
-                decorationPath: CGMutablePath(),
+                decorationPath: MathPath(),
                 textRuns: [],
                 rootBox: Box(),
                 symbolRenderScratch: nil,

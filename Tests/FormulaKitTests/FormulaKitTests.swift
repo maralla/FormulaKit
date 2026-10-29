@@ -1,11 +1,12 @@
-import CoreGraphics
-import CoreText
+import Foundation
 import XCTest
 
 @testable import FormulaKit
 
 #if os(macOS)
 import AppKit
+import CoreGraphics
+import CoreText
 #endif
 
 final class FormulaKitTests: XCTestCase {
@@ -138,7 +139,7 @@ final class FormulaKitTests: XCTestCase {
         XCTAssertFalse(letters.contains("u"))
     }
 
-    /// `\,` / `\!` are mu-based glue (reference `macros.js`), not punctuation glyphs.
+    /// `\,` / `\!` are mu-based glue, not punctuation glyphs.
     func testRender_thinspaceAndNegThinspace() throws {
         let thin = try FormulaKit.render(#"a\,b"#)
         let neg = try FormulaKit.render(#"a\!b"#)
@@ -235,7 +236,7 @@ final class FormulaKitTests: XCTestCase {
         ctx.translateBy(x: -bounds.midX, y: -bounds.midY)
 
         ctx.setFillColor(CGColor.black)
-        ctx.addPath(layout.decorationPath)
+        ctx.addPath(layout.decorationPath.cgPath)
         ctx.fillPath()
 
         let mathToDevice = ctx.ctm
@@ -632,7 +633,7 @@ final class FormulaKitTests: XCTestCase {
         ctx.translateBy(x: -bounds.midX, y: -bounds.midY)
 
         ctx.setFillColor(CGColor.black)
-        ctx.addPath(layout.decorationPath)
+        ctx.addPath(layout.decorationPath.cgPath)
         ctx.fillPath()
 
         let mathToDevice = ctx.ctm
@@ -856,6 +857,7 @@ final class FormulaKitTests: XCTestCase {
             "expected font matching \(expected), got \(ps)"
         )
     }
+    #endif
 
     func testMathFontRegistryResolvesStixByDefault() {
         let p = MathFont.resolvedProvider(for: .stix)
@@ -875,5 +877,21 @@ final class FormulaKitTests: XCTestCase {
         let layout = try FormulaKit.render(#"x"#, options: opts)
         XCTAssertEqual(layout.mathFont, .stix)
     }
-    #endif
+
+    func testMathFontRegistryResolvesGaeguMath() throws {
+        let p = MathFont.resolvedProvider(for: .gaeguMath)
+        XCTAssertEqual(p.identifier, .gaeguMath)
+        XCTAssertEqual(p.primaryMathPostScriptName, "GaeguMath-Regular")
+        XCTAssertTrue(p.isPrimaryMathFontAvailable(forFontSize: 16))
+        XCTAssertNotNil(GaeguMath.bundledFontURL)
+
+        let opts = FormulaKit.Options(mathFont: .gaeguMath)
+        let layout = try FormulaKit.render(
+            #"\frac{-b \pm \sqrt{b^2 - 4ac}}{2a} + \underbrace{x_1 + x_2}_{k}"#,
+            options: opts
+        )
+        XCTAssertEqual(layout.mathFont, .gaeguMath)
+        XCTAssertFalse(layout.textRuns.isEmpty)
+        XCTAssertGreaterThan(layout.rootBox.width, 0)
+    }
 }
