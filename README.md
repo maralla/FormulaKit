@@ -20,16 +20,16 @@ import FormulaKit
 
 let layout = try FormulaKit.render(#"\frac{-b \pm \sqrt{b^2-4ac}}{2a}"#)
 
-// Or render with the bundled hand-drawn Gaegu Math font:
-let gaeguLayout = try FormulaKit.render(
+// Or render with the bundled hand-drawn Fei Math font:
+let feiLayout = try FormulaKit.render(
     #"\frac{-b \pm \sqrt{b^2-4ac}}{2a}"#,
-    options: FormulaKit.Options(mathFont: .gaeguMath)
+    options: FormulaKit.Options(mathFont: .feiMath)
 )
 ```
 
-Use `FormulaKit.parse` if you only need the parse tree. Configure behavior with `FormulaKit.Options` (font size, display vs text style, error handling, and math font selection: `.stix` or `.gaeguMath`).
+Use `FormulaKit.parse` if you only need the parse tree. Configure behavior with `FormulaKit.Options` (font size, display vs text style, error handling, and math font selection: `.stix` or `.feiMath`).
 
-STIX is used as the default math font when available on the system, and **Gaegu Math** (`GaeguMath-Regular.ttf`) is bundled with the package.
+STIX is used as the default math font when available on the system, and **Fei Math** (`FeiMath-Regular.ttf`) is bundled with the package.
 
 ## License
 

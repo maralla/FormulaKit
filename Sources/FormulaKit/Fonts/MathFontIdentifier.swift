@@ -15,9 +15,9 @@ public struct MathFontIdentifier: Hashable, Sendable, Codable, RawRepresentable,
     /// System **STIX Two** on macOS (default).
     public static let stix = MathFontIdentifier(rawValue: "stix")
 
-    /// Bundled **Gaegu Math** (`GaeguMath-Regular.ttf`).
-    public static let gaeguMath = MathFontIdentifier(rawValue: "gaeguMath")
+    /// Bundled **Fei Math** (`FeiMath-Regular.ttf`).
+    public static let feiMath = MathFontIdentifier(rawValue: "feiMath")
 
-    /// Alias for ``gaeguMath``.
-    public static let gaegu = MathFontIdentifier.gaeguMath
+    /// Alias for ``feiMath``.
+    public static let fei = MathFontIdentifier.feiMath
 }

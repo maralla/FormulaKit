@@ -878,19 +878,19 @@ final class FormulaKitTests: XCTestCase {
         XCTAssertEqual(layout.mathFont, .stix)
     }
 
-    func testMathFontRegistryResolvesGaeguMath() throws {
-        let p = MathFont.resolvedProvider(for: .gaeguMath)
-        XCTAssertEqual(p.identifier, .gaeguMath)
-        XCTAssertEqual(p.primaryMathPostScriptName, "GaeguMath-Regular")
+    func testMathFontRegistryResolvesFeiMath() throws {
+        let p = MathFont.resolvedProvider(for: .feiMath)
+        XCTAssertEqual(p.identifier, .feiMath)
+        XCTAssertEqual(p.primaryMathPostScriptName, "FeiMath-Regular")
         XCTAssertTrue(p.isPrimaryMathFontAvailable(forFontSize: 16))
-        XCTAssertNotNil(GaeguMath.bundledFontURL)
+        XCTAssertNotNil(FeiMath.bundledFontURL)
 
-        let opts = FormulaKit.Options(mathFont: .gaeguMath)
+        let opts = FormulaKit.Options(mathFont: .feiMath)
         let layout = try FormulaKit.render(
             #"\frac{-b \pm \sqrt{b^2 - 4ac}}{2a} + \underbrace{x_1 + x_2}_{k}"#,
             options: opts
         )
-        XCTAssertEqual(layout.mathFont, .gaeguMath)
+        XCTAssertEqual(layout.mathFont, .feiMath)
         XCTAssertFalse(layout.textRuns.isEmpty)
         XCTAssertGreaterThan(layout.rootBox.width, 0)
     }

@@ -1,13 +1,13 @@
 import Foundation
 
-/// Bundled **Gaegu Math** (`GaeguMath-Regular.ttf`) OpenType math backend.
-public enum GaeguMath {
-    public static let primaryMathPostScriptName = "GaeguMath-Regular"
-    public static let resourceName = "GaeguMath-Regular"
+/// Bundled **Fei Math** (`FeiMath-Regular.ttf`) OpenType math backend.
+public enum FeiMath {
+    public static let primaryMathPostScriptName = "FeiMath-Regular"
+    public static let resourceName = "FeiMath-Regular"
     public static let resourceExtension = "ttf"
-    public static let supplementalFontsDirectoryHint = "Bundle.module (Resources/GaeguMath-Regular.ttf)"
+    public static let supplementalFontsDirectoryHint = "Bundle.module (Resources/FeiMath-Regular.ttf)"
 
-    /// URL of the bundled `GaeguMath-Regular.ttf` resource inside the package.
+    /// URL of the bundled `FeiMath-Regular.ttf` resource inside the package.
     public static var bundledFontURL: URL? {
         Bundle.module.url(forResource: resourceName, withExtension: resourceExtension)
     }
@@ -170,14 +170,14 @@ public enum GaeguMath {
     }
 }
 
-/// Bundled **Gaegu Math** (`GaeguMath-Regular.ttf`) backend.
-public struct GaeguMathFontProvider: MathFontProviding {
+/// Bundled **Fei Math** (`FeiMath-Regular.ttf`) backend.
+public struct FeiMathFontProvider: MathFontProviding {
     public init() {}
-    public let identifier = MathFontIdentifier.gaeguMath
-    public var layout: MathFontLayoutTuning { GaeguMath.layoutTuning }
-    public var delimiterSizing: DelimiterSizing { GaeguMath.delimiterSizing }
-    public var primaryMathPostScriptName: String { GaeguMath.primaryMathPostScriptName }
-    public var supplementalFontsDirectoryHint: String { GaeguMath.supplementalFontsDirectoryHint }
+    public let identifier = MathFontIdentifier.feiMath
+    public var layout: MathFontLayoutTuning { FeiMath.layoutTuning }
+    public var delimiterSizing: DelimiterSizing { FeiMath.delimiterSizing }
+    public var primaryMathPostScriptName: String { FeiMath.primaryMathPostScriptName }
+    public var supplementalFontsDirectoryHint: String { FeiMath.supplementalFontsDirectoryHint }
 
     public func resolvedPostScriptFontName(
         logicalFontName _: String,
@@ -185,11 +185,11 @@ public struct GaeguMathFontProvider: MathFontProviding {
         textMode _: Bool,
         fontSize _: CGFloat
     ) -> String {
-        GaeguMath.primaryMathPostScriptName
+        FeiMath.primaryMathPostScriptName
     }
 
     public func isPrimaryMathFontAvailable(forFontSize size: CGFloat) -> Bool {
-        GaeguMath.isPrimaryMathFontAvailable(forFontSize: size)
+        FeiMath.isPrimaryMathFontAvailable(forFontSize: size)
     }
 
     public func mathcalMappedLetter(_ character: Character) -> String? { STIX.mathcalMappedLetter(character) }
@@ -215,7 +215,7 @@ public struct GaeguMathFontProvider: MathFontProviding {
     }
 
     public func openTypeGlyphName(logicalFontName: String, character: String, textMode: Bool) -> String? {
-        GaeguMath.openTypeGlyphName(logicalFontName: logicalFontName, character: character, textMode: textMode)
+        FeiMath.openTypeGlyphName(logicalFontName: logicalFontName, character: character, textMode: textMode)
     }
 
     public func horizontalBraceLayout(
@@ -234,6 +234,6 @@ public struct GaeguMathFontProvider: MathFontProviding {
     }
 
     public func renderRulePath(rect: CGRect, role: MathRuleRole, options _: FormulaKit.Options) -> MathPath {
-        GaeguMath.renderRulePath(rect: rect, role: role)
+        FeiMath.renderRulePath(rect: rect, role: role)
     }
 }

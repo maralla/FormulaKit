@@ -49,7 +49,7 @@ struct FallbackMathFontBackend: MathFontBackend {
     }
 }
 
-/// Registry of ``MathFontProviding`` backends. **STIX** and **Gaegu Math** are registered by default.
+/// Registry of ``MathFontProviding`` backends. **STIX** and **Fei Math** are registered by default.
 public final class MathFontRegistry: @unchecked Sendable {
     public static let shared = MathFontRegistry()
 
@@ -81,7 +81,7 @@ public final class MathFontRegistry: @unchecked Sendable {
         #endif
         defaultIdentifier = .stix
         register(STIXMathFontProvider())
-        register(GaeguMathFontProvider())
+        register(FeiMathFontProvider())
     }
 
     /// Registers or replaces a provider for its ``MathFontProviding/identifier``.

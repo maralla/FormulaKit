@@ -7,28 +7,28 @@ import Foundation
 /// Core Text implementation of ``MathFontBackend``.
 public struct MacOSCoreTextFontBackend: MathFontBackend {
     public init() {
-        Self.ensureBundledGaeguRegistered()
+        Self.ensureBundledFeiRegistered()
     }
 
     private static let bundledCGFont: CGFont? = {
-        guard let url = GaeguMath.bundledFontURL else { return nil }
+        guard let url = FeiMath.bundledFontURL else { return nil }
         CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
         guard let provider = CGDataProvider(url: url as CFURL) else { return nil }
         return CGFont(provider)
     }()
 
-    public static func ensureBundledGaeguRegistered() {
+    public static func ensureBundledFeiRegistered() {
         _ = bundledCGFont
     }
 
     public static func ctFont(postScriptName: String, size: CGFloat) -> CTFont? {
-        ensureBundledGaeguRegistered()
+        ensureBundledFeiRegistered()
         let f = CTFontCreateWithName(postScriptName as CFString, size, nil)
         let ps = (CTFontCopyPostScriptName(f) as String?) ?? ""
         if ps == postScriptName {
             return f
         }
-        if postScriptName == GaeguMath.primaryMathPostScriptName, let cgFont = bundledCGFont {
+        if postScriptName == FeiMath.primaryMathPostScriptName, let cgFont = bundledCGFont {
             return CTFontCreateWithGraphicsFont(cgFont, size, nil, nil)
         }
         return nil

@@ -418,7 +418,7 @@ public struct STIXMathFontProvider: MathFontProviding {
     }
 
     public func openTypeGlyphName(logicalFontName: String, character: String, textMode: Bool) -> String? {
-        GaeguMath.openTypeGlyphName(logicalFontName: logicalFontName, character: character, textMode: textMode)
+        FeiMath.openTypeGlyphName(logicalFontName: logicalFontName, character: character, textMode: textMode)
     }
 
     public func horizontalBraceLayout(
