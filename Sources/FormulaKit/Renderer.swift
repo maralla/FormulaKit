@@ -1620,13 +1620,19 @@ public struct Renderer {
                 radBot + 0.68 * (radTop - radBot) + options.fontSize * 0.06 + rootBox.depth,
                 options.fontSize * 0.52 + rootBox.depth
             )
-            let overlapKern = -radicalBox.width * 0.28
-            let leadPad = max(0, -overlapKern - rootBox.width + options.fontSize * 0.12)
+            let rootCenterTarget = radicalBox.width * 0.48
+            let rootOffsetFromRad = rootCenterTarget - rootBox.width * 0.5
+            let leadPad = options.fontSize * 0.08 + max(0, -rootOffsetFromRad)
+            let radShiftAfterRoot = -rootBox.width - rootOffsetFromRad
             let rootVBox = VerticalBox(
                 elements: [VerticalBox.Element(node: rootIdx, shift: rootShift)],
                 position: .individualShift
             )
-            let prefix: [LayoutNode] = [SpaceNode(width: leadPad), rootVBox, SpaceNode(width: overlapKern)]
+            let prefix: [LayoutNode] = [
+                SpaceNode(width: leadPad + max(0, rootOffsetFromRad)),
+                rootVBox,
+                SpaceNode(width: radShiftAfterRoot),
+            ]
             children.insert(contentsOf: prefix, at: 0)
         }
 
