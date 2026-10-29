@@ -2,11 +2,11 @@ import Foundation
 
 private enum RendererSymbolSets {
     static let largeOperators: Set<String> = [
-        "∑", "∏", "∫", "∮", "∬", "∭", "∐", "⋂", "⋃", "⨀", "⨁", "⨂", "⨄", "⨆", "⋀", "⋁",
+        "∑", "∏", "∫", "∮", "∬", "∭", "∯", "∰", "∐", "⋂", "⋃", "⨀", "⨁", "⨂", "⨄", "⨆", "⋀", "⋁",
     ]
 
     static let limitsOperators: Set<String> = [
-        "lim", "max", "min", "sup", "inf", "det", "gcd", "Pr",
+        "lim", "limsup", "liminf", "max", "min", "sup", "inf", "argmin", "argmax", "det", "gcd", "Pr",
     ]
 }
 
@@ -154,30 +154,36 @@ public struct Renderer {
 
     private func getAtomType(for value: String) -> AtomType {
         let operators = [
-            "sin", "cos", "tan", "cot", "sec", "csc", "sinh", "cosh", "tanh", "arcsin", "arccos", "arctan", "ln", "log",
-            "exp", "lim", "sup", "inf", "max", "min", "det", "arg", "gcd", "Pr",
+            "sin", "cos", "tan", "cot", "sec", "csc", "sinh", "cosh", "tanh", "coth", "sech", "csch",
+            "arcsin", "arccos", "arctan", "arccot", "arcsec", "arccsc", "arsinh", "arcosh", "artanh",
+            "ln", "log", "lg", "exp", "lim", "limsup", "liminf", "sup", "inf", "max", "min",
+            "argmin", "argmax", "det", "dim", "ker", "hom", "im", "deg", "arg", "gcd", "lcm", "Pr",
+            "sgn", "tr", "trace", "rank", "diag", "erf",
         ]
 
         if [
-            "+", "-", "±", "∓", "×", "÷", "*", "\u{22C5}", "\u{2299}", "∧", "∨", "∩", "∪", "⊎", "⊓", "⊔", "⊖", "◯", "≀", "⨿",
-            "&", "⊕", "⊗", "∖",
+            "+", "-", "±", "∓", "×", "÷", "*", "∗", "⋆", "\u{22C5}", "\u{2299}", "∘", "•",
+            "∧", "∨", "∩", "∪", "⊎", "⊓", "⊔", "⊖", "◯", "≀", "⨿", "&", "⊕", "⊗", "⊘", "∖",
+            "⊞", "⊟", "⊠", "⊡", "◁", "▷", "⋉", "⋊", "⋇", "⊺", "⊻", "⊼", "†", "‡", "⋒", "⋓",
         ].contains(value) {
             return .mbin
         } else if [
-            "=", "<", ">", "≤", "≥", "≈", "≠", "←", "→", "⇐", "⇒", "↔", "⇔",
-            "↑", "↓", "⇑", "⇓",
+            "=", "<", ">", "≤", "≥", "≈", "≉", "≠", "≢", "≰", "≱", "≮", "≯", "≁", "≇", "≄",
+            "←", "→", "⇐", "⇒", "↔", "⇔", "↑", "↓", "⇑", "⇓", "↕", "⇕",
             "⟵", "⟶", "⟷", "⟸", "⟹", "⟺", "↦", "⟼",
-            "↗", "↘", "↙", "↖", "↩", "↪", "↼", "⇀", "↽", "⇁", "⇌",
-            "∈", "∉", "⊂", "⊃", "⊆", "⊇", "⫅", "⫆",
-            "≡", "∼", "≅", "≺", "≻", "⪯", "⪰", "≃", "≍", "≪", "≫", "⩽", "⩾",
-            "∣", "∥", "⊥", "⋈", "⌣", "⌢", "∋", "⊢", "⊣", "≐", "⊑", "⊒", "⊨", "∴", "∵", "\u{2236}",
+            "↗", "↘", "↙", "↖", "↩", "↪", "↼", "⇀", "↽", "⇁", "↿", "↾", "⇃", "⇂", "⇌", "⇋",
+            "⇝", "↭", "↞", "↠", "↢", "↣", "↶", "↷", "↺", "↻", "⇈", "⇊", "⇇", "⇉", "⇆", "⇄", "⊸",
+            "∈", "∉", "⊂", "⊃", "⊆", "⊇", "⫅", "⫆", "⊄", "⊅", "⊈", "⊉", "⊊", "⊋", "⊏", "⊐",
+            "≡", "∼", "≅", "∝", "≺", "≻", "⪯", "⪰", "≃", "≍", "≪", "≫", "⋘", "⋙", "≲", "≳", "⩽", "⩾",
+            "∣", "∤", "∥", "∦", "⊥", "⋈", "⌣", "⌢", "∋", "∌", "⊢", "⊣", "⊩", "⊬", "⊭",
+            "≐", "≜", "≗", "⊑", "⊒", "⊨", "∴", "∵", "\u{2236}",
         ].contains(value) {
             return .mrel
         } else if [",", ";", "\u{2026}", "\u{22EF}", "\u{22EE}", "\u{22F1}"].contains(value) {
             return .mpunct
-        } else if ["(", "[", "{", "|"].contains(value) {
+        } else if ["(", "[", "{", "|", "⌊", "⌈", "⟨", "⟮", "⟦"].contains(value) {
             return .mopen
-        } else if [")", "]", "}", "|"].contains(value) {
+        } else if [")", "]", "}", "|", "⌋", "⌉", "⟩", "⟯", "⟧"].contains(value) {
             return .mclose
         } else if RendererSymbolSets.largeOperators.contains(value) || operators.contains(value) {
             return .mop
@@ -252,11 +258,17 @@ public struct Renderer {
                 // Multi-letter `\tanh` / `\sin`: last letter may still report serif ic; never use it before `(`.
                 let prevItalic: CGFloat = (prevType == .mop) ? 0 : prevBox.italicCorrection
                 let currType = effectiveTypes[index]
-                let kernAfterPrev = prevItalic + delimHang
+                let isRoundOpenNext = parseNodeStartsWithRoundOpenDelimiter(nodes[index])
+                let extraOpenGap: CGFloat = (prevType == .mord && isRoundOpenNext) ? 0.04 * options.fontSize : 0
+                let kernAfterPrev = prevItalic + delimHang + extraOpenGap
                 if abs(kernAfterPrev) > 0.000_5 {
                     layoutNodes.append(SpaceNode(width: kernAfterPrev))
                 }
-                let spaceMu = Renderer.spacingTable[prevType]?[currType] ?? 0
+                let isFunctionCallDelim =
+                    prevType == .mord
+                    && nodes[index].type == .function
+                    && nodes[index].value == "leftright"
+                let spaceMu = isFunctionCallDelim ? 0 : (Renderer.spacingTable[prevType]?[currType] ?? 0)
                 if spaceMu > 0 {
                     let spaceWidth = CGFloat(spaceMu) * fm.cssEmPerMu * options.fontSize
                     layoutNodes.append(SpaceNode(width: spaceWidth))
@@ -656,11 +668,30 @@ public struct Renderer {
             let em = options.fontSize
             let w = (node.value == "qquad" ? 2 : 1) * fm.quad * em
             return SpaceNode(width: w)
-        case "frac", "dfrac":
+        case "frac", "dfrac", "tfrac", "cfrac", "atop":
             return buildFractionNode(node, options: options)
+        case "overline":
+            return buildOverlineUnderlineNode(node, options: options, isOver: true)
+        case "underline":
+            return buildOverlineUnderlineNode(node, options: options, isOver: false)
+        case "boxed":
+            return buildBoxedNode(node, options: options)
+        case "cancel", "bcancel", "xcancel":
+            return buildCancelNode(node, options: options, mode: node.value)
+        case "pmod":
+            return buildPmodNode(node, options: options)
+        case "bmod":
+            let modText = buildOperatorNameNode(
+                ParseNode(type: .function, value: "operatorname", children: [ParseNode(type: .symbol, value: "mod")]),
+                options: options
+            )
+            return HorizontalBox(
+                children: [SpaceNode(width: spaceWidthMu(4, options: options)), modText, SpaceNode(width: spaceWidthMu(4, options: options))],
+                type: .mbin
+            )
         case "sqrt":
             return buildSqrtNode(node, options: options)
-        case "supsub":
+        case let v where v == "supsub" || v.hasPrefix("supsub:"):
             return buildSupSubNode(node, options: options)
         case "sup":
             return buildSupSubNode(
@@ -778,10 +809,42 @@ public struct Renderer {
                     fontSize: options.fontSize
                 )
             }
+            if styleName == "mathfrak", node.type == .symbol, node.value.count == 1, let ch = node.value.first,
+                let frak = options.resolvedMathFont.mathfrakMappedLetter(ch)
+            {
+                return SymbolNode(
+                    character: frak,
+                    type: .mord,
+                    fontName: MathLogicalFontNames.mainRegular,
+                    fontSize: options.fontSize
+                )
+            }
             return SymbolNode(character: node.value, type: atom, fontName: fontName, fontSize: options.fontSize)
+        } else if node.type == .text {
+            let fontName: String
+            switch styleName {
+            case "mathbf", "boldsymbol": fontName = MathLogicalFontNames.mainBold
+            case "mathit": fontName = MathLogicalFontNames.mainItalic
+            case "mathsf": fontName = MathLogicalFontNames.sansSerifRegular
+            case "mathtt": fontName = MathLogicalFontNames.typewriterRegular
+            default: fontName = MathLogicalFontNames.mainRegular
+            }
+            let children = node.value.map { ch in
+                SymbolNode(character: String(ch), type: .mord, fontName: fontName, fontSize: options.fontSize)
+            }
+            return HorizontalBox(children: children)
         } else if node.type == .group {
             let children = node.children.map { applyStyle(styleName, to: $0, options: options) }
             return HorizontalBox(children: children)
+        } else if node.type == .function && (node.value == "supsub" || node.value.hasPrefix("supsub:")) {
+            let styledChildren = node.children.map { child -> ParseNode in
+                if child.value == "sup" || child.value == "sub" {
+                    let inner = child.children.map { ParseNode(type: .style, value: styleName, children: [$0]) }
+                    return ParseNode(type: .function, value: child.value, children: inner)
+                }
+                return ParseNode(type: .style, value: styleName, children: [child])
+            }
+            return buildSupSubNode(ParseNode(type: .function, value: node.value, children: styledChildren), options: options)
         } else {
             return buildLayoutNode(node, options: options)
         }
@@ -808,14 +871,57 @@ public struct Renderer {
 
     private func buildAccentNode(_ node: ParseNode, options: FormulaKit.Options) -> LayoutNode {
         guard !node.children.isEmpty else { return SymbolNode(character: "?") }
-        let base = buildLayoutNode(node.children[0], options: options)
+        var baseParseNode = node.children[0]
+        if baseParseNode.type == .group && baseParseNode.children.count == 1 {
+            baseParseNode = baseParseNode.children[0]
+        }
+        if baseParseNode.type == .symbol {
+            if baseParseNode.value == "i" {
+                baseParseNode = ParseNode(type: .symbol, value: "ı")
+            } else if baseParseNode.value == "j" {
+                baseParseNode = ParseNode(type: .symbol, value: "ȷ")
+            }
+        }
+        let base = buildLayoutNode(baseParseNode, options: options)
         let baseBox = base.getBox(options: options)
         let accentSymbol = getAccentSymbol(for: node.value)
+
+        let wideCandidates = options.resolvedMathFont.openTypeMathWideAccentGlyphNames(for: node.value)
+        let isWideCommand = [
+            "\\widehat", "\\widetilde", "\\widecheck", "\\overrightarrow", "\\overleftarrow", "\\overleftrightarrow",
+        ].contains(node.value)
+        var pickedOTGlyph: String?
+        if (isWideCommand || baseBox.width > options.fontSize * 0.65), !wideCandidates.isEmpty {
+            let psName = options.resolvedMathFont.resolvedPostScriptFontName(
+                logicalFontName: MathLogicalFontNames.mainRegular,
+                character: accentSymbol,
+                textMode: false,
+                fontSize: options.fontSize
+            )
+            let avail = wideCandidates.filter {
+                MathFont.backend.hasOpenTypeGlyph(named: $0, postScriptName: psName, fontSize: options.fontSize)
+            }
+            for gn in avail {
+                let probe = SymbolNode(
+                    character: accentSymbol,
+                    type: .mord,
+                    fontName: MathLogicalFontNames.mainRegular,
+                    fontSize: options.fontSize,
+                    openTypeMathGlyphName: gn
+                )
+                pickedOTGlyph = gn
+                if probe.getBox(options: options).width >= baseBox.width * 0.92 {
+                    break
+                }
+            }
+        }
+
         let accent = SymbolNode(
             character: accentSymbol,
             type: .mord,
             fontName: MathLogicalFontNames.mainRegular,
-            fontSize: options.fontSize
+            fontSize: options.fontSize,
+            openTypeMathGlyphName: pickedOTGlyph
         )
         let accentBox = accent.getBox(options: options)
         let metrics = FontMetrics.getMetrics(for: options.fontSize)
@@ -825,7 +931,7 @@ public struct Renderer {
         return VerticalBox(
             elements: [
                 VerticalBox.Element(node: base, shift: 0),
-                VerticalBox.Element(node: centeredAccent, shift: baseBox.height - clearance + accentBox.height * 0.2),
+                VerticalBox.Element(node: centeredAccent, shift: baseBox.height - clearance + accentBox.height * 0.15),
             ],
             position: .individualShift
         )
@@ -833,8 +939,11 @@ public struct Renderer {
 
     private func getAccentSymbol(for label: String) -> String {
         let mappings: [String: String] = [
-            "\\vec": "→", "\\bar": "ˉ", "\\hat": "ˆ", "\\tilde": "˜", "\\dot": "˙", "\\ddot": "¨", "\\acute": "´",
-            "\\grave": "`", "\\check": "ˇ", "\\breve": "˘",
+            "\\vec": "→", "\\overrightarrow": "→", "\\overleftarrow": "←", "\\overleftrightarrow": "↔",
+            "\\bar": "ˉ", "\\hat": "ˆ", "\\widehat": "ˆ", "\\tilde": "˜", "\\widetilde": "˜",
+            "\\dot": "˙", "\\ddot": "¨", "\\acute": "´", "\\grave": "`",
+            "\\check": "ˇ", "\\widecheck": "ˇ", "\\breve": "˘",
+            "\\^": "ˆ", "\\~": "˜", "\\=": "ˉ", "\\.": "˙", "\\\"": "¨", "\\'": "´", "\\`": "`", "\\v": "ˇ", "\\u": "˘",
         ]
         return mappings[label] ?? "?"
     }
@@ -972,6 +1081,7 @@ public struct Renderer {
             "\\vert": "|", "|": "|", "\\Vert": "‖", "\\|": "‖", "\\lVert": "‖", "\\rVert": "‖", "(": "(", ")": ")",
             "[": "[", "]": "]",
             "\\lfloor": "⌊", "\\rfloor": "⌋", "\\lceil": "⌈", "\\rceil": "⌉",
+            "\\langle": "⟨", "\\rangle": "⟩", "\\llbracket": "⟦", "\\rrbracket": "⟧",
             ".": "", "\\left\\lfloor": "⌊", "\\right\\rfloor": "⌋",
         ]
         return mappings[delim] ?? delim.replacingOccurrences(of: "\\", with: "")
@@ -981,6 +1091,15 @@ public struct Renderer {
         let parts = node.value.split(separator: ":", maxSplits: 1)
         let envStem = parts.isEmpty ? "" : String(parts[0])
         let colSpec = parts.count > 1 ? String(parts[1]) : ""
+
+        let cellOptions: FormulaKit.Options
+        if envStem == "substack" || envStem == "smallmatrix" {
+            cellOptions = options.withStyle(.script)
+        } else if envStem == "dcases" {
+            cellOptions = options.withStyle(.display)
+        } else {
+            cellOptions = options
+        }
 
         var grid: [[LayoutNode]] = []
         var isHlineRow: [Bool] = []
@@ -992,7 +1111,7 @@ public struct Renderer {
                 isHlineRow.append(false)
                 var rowLayout: [LayoutNode] = []
                 for cellNode in rowNode.children {
-                    rowLayout.append(buildLayoutNode(cellNode, options: options))
+                    rowLayout.append(buildLayoutNode(cellNode, options: cellOptions))
                 }
                 grid.append(rowLayout)
             }
@@ -1025,11 +1144,13 @@ public struct Renderer {
         }
 
         var alignments: [Character] = []
-        if envStem == "aligned" || envStem == "alignedat" {
+        if envStem == "aligned" || envStem == "alignedat" || envStem == "align" || envStem == "align*" {
             alignments = (0..<maxCols).map { $0 % 2 == 0 ? "r" : "l" }
-        } else if envStem == "cases" || envStem == "rcases" {
+        } else if envStem == "cases" || envStem == "dcases" || envStem == "rcases" {
             alignments = Array(repeating: "l", count: maxCols)
-        } else if envStem == "gathered" || envStem == "split" {
+        } else if envStem == "gathered" || envStem == "gather" || envStem == "gather*" || envStem == "split"
+            || envStem == "substack"
+        {
             alignments = Array(repeating: "c", count: maxCols)
         } else {
             for char in colSpec { if "lcr".contains(char) { alignments.append(char) } }
@@ -1039,13 +1160,13 @@ public struct Renderer {
         var colWidths = [CGFloat](repeating: 0, count: maxCols)
         var rowHeights = [CGFloat](repeating: 0, count: grid.count)
         var rowDepths = [CGFloat](repeating: 0, count: grid.count)
-        let metrics0 = FontMetrics.getMetrics(for: options.fontSize)
+        let metrics0 = FontMetrics.getMetrics(for: cellOptions.fontSize)
         let pt = 1.0 / metrics0.ptPerEm
-        let arraycolsep = 5.0 * pt * options.fontSize
-        let arrayskip = 1.0 * 12.0 * pt * options.fontSize
+        let arraycolsep = (envStem == "smallmatrix" ? 2.5 : 5.0) * pt * cellOptions.fontSize
+        let arrayskip = (envStem == "substack" || envStem == "smallmatrix" ? 0.75 : 1.0) * 12.0 * pt * cellOptions.fontSize
         let arstrutHeight = 0.7 * arrayskip
         let arstrutDepth = 0.3 * arrayskip
-        let ruleThickness = metrics0.defaultRuleThickness * options.fontSize
+        let ruleThickness = metrics0.defaultRuleThickness * cellOptions.fontSize
         let hlinePad = 0.2 * arrayskip
 
         for (r, row) in grid.enumerated() {
@@ -1055,7 +1176,7 @@ public struct Renderer {
                 continue
             }
             for (c, cell) in row.enumerated() where c < maxCols {
-                let box = cell.getBox(options: options)
+                let box = cell.getBox(options: cellOptions)
                 colWidths[c] = max(colWidths[c], box.width)
                 rowHeights[r] = max(rowHeights[r], box.height)
                 rowDepths[r] = max(rowDepths[r], box.depth)
@@ -1155,8 +1276,10 @@ public struct Renderer {
             }
         }
 
+        let explicitLimits = node.value == "supsub:limits"
+        let explicitNoLimits = node.value == "supsub:nolimits"
         let isIntegral =
-            node.children[0].type == .symbol && ["∫", "∮", "∬", "∭"].contains(node.children[0].value)
+            node.children[0].type == .symbol && ["∫", "∮", "∬", "∭", "∯", "∰"].contains(node.children[0].value)
         let isLargeOp =
             base.type == .mop
             && !isIntegral
@@ -1166,19 +1289,31 @@ public struct Renderer {
             && (node.children[0].type == .symbol && RendererSymbolSets.limitsOperators.contains(node.children[0].value))
         let isHorizBrace = node.children[0].type == .horizBrace
 
-        if (isLargeOp || isLimitsOp || isHorizBrace) && options.style == .display {
-            // Display limits / horizontal braces use centered rows: the outer width is
-            // max(base, sup, sub) and each row is centered when narrower.
-            var totalWidth = baseBox.width
+        let useCenteredLimits =
+            isHorizBrace
+            || explicitLimits
+            || (!explicitNoLimits && (isLargeOp || isLimitsOp) && options.style == .display)
+
+        if useCenteredLimits {
+            // Display limits / horizontal braces use centered rows. For \overbrace / \underbrace,
+            // a wide text label sits far above/below the baseline, so let it overhang symmetrically
+            // without forcing a large asymmetric gap next to surrounding `=` or `+` operators on the baseline.
+            var maxLabelWidth: CGFloat = 0
             if let supm = supm, let supOpts = supOptions {
-                totalWidth = max(totalWidth, supm.getBox(options: supOpts).width)
+                maxLabelWidth = max(maxLabelWidth, supm.getBox(options: supOpts).width)
             }
             if let subm = subm, let subOpts = subOptions {
-                totalWidth = max(totalWidth, subm.getBox(options: subOpts).width)
+                maxLabelWidth = max(maxLabelWidth, subm.getBox(options: subOpts).width)
+            }
+            let totalWidth: CGFloat
+            if isHorizBrace {
+                totalWidth = baseBox.width + max(0, maxLabelWidth - baseBox.width) * 0.15
+            } else {
+                totalWidth = max(baseBox.width, maxLabelWidth)
             }
             func hPadCenter(_ node: LayoutNode, _ innerWidth: CGFloat) -> LayoutNode {
-                let pad = max(0, (totalWidth - innerWidth) / 2)
-                guard pad > 0 else { return node }
+                let pad = (totalWidth - innerWidth) / 2
+                guard abs(pad) > 0.001 else { return node }
                 return HorizontalBox(children: [SpaceNode(width: pad), node, SpaceNode(width: pad)])
             }
 
@@ -1304,42 +1439,125 @@ public struct Renderer {
         } else {
             return base
         }
-        let trail = ScriptSpaceTrailingNode(width: scriptSpace, italicCorrection: baseBox.italicCorrection)
+        let trailingItalic: CGFloat = (supm == nil) ? baseBox.italicCorrection : 0
+        let trail = ScriptSpaceTrailingNode(width: scriptSpace, italicCorrection: trailingItalic)
         return HorizontalBox(children: [base, supsub, trail])
     }
 
     private func buildFractionNode(_ node: ParseNode, options: FormulaKit.Options) -> LayoutNode {
         guard node.children.count >= 2 else { return SymbolNode(character: "\\frac{?}{?}") }
         let fontLayout = options.resolvedMathFont.layout
-        let numOpts = options.withStyle(options.style.fracNum()),
-            denOpts = options.withStyle(options.style.fracDenom()),
-            numerator = buildLayoutNode(node.children[0], options: numOpts),
+        let effectiveOptions: FormulaKit.Options
+        if node.value == "dfrac" || node.value == "cfrac" {
+            effectiveOptions = options.withStyle(.display)
+        } else if node.value == "tfrac" {
+            effectiveOptions = options.withStyle(.text)
+        } else {
+            effectiveOptions = options
+        }
+        let numOpts = node.value == "cfrac" ? effectiveOptions : effectiveOptions.withStyle(effectiveOptions.style.fracNum())
+        let denOpts = node.value == "cfrac" ? effectiveOptions.withStyle(.displayCramped) : effectiveOptions.withStyle(effectiveOptions.style.fracDenom())
+        let numerator = buildLayoutNode(node.children[0], options: numOpts),
             denominator = buildLayoutNode(node.children[1], options: denOpts),
             numBox = numerator.getBox(options: numOpts), denBox = denominator.getBox(options: denOpts),
-            metrics = FontMetrics.getMetrics(for: options.fontSize),
-            rule = fontLayout.fractionRuleThicknessEm * options.fontSize,
-            axis = metrics.axisHeight * options.fontSize
-        let displayFrac = options.style == .display || node.value == "dfrac"
+            metrics = FontMetrics.getMetrics(for: effectiveOptions.fontSize),
+            hasRule = node.value != "atop",
+            rule = (hasRule ? fontLayout.fractionRuleThicknessEm : 0) * effectiveOptions.fontSize,
+            gapClear = fontLayout.fractionRuleThicknessEm * effectiveOptions.fontSize,
+            axis = metrics.axisHeight * effectiveOptions.fontSize
+        let displayFrac = effectiveOptions.style == .display || node.value == "dfrac" || node.value == "cfrac"
         var ns: CGFloat, ds: CGFloat, cl: CGFloat;
         if displayFrac {
-            ns = metrics.num1 * options.fontSize; ds = metrics.denom1 * options.fontSize; cl = 3 * rule
+            ns = metrics.num1 * effectiveOptions.fontSize; ds = metrics.denom1 * effectiveOptions.fontSize; cl = 3 * gapClear
         } else {
-            ns = metrics.num2 * options.fontSize; ds = metrics.denom2 * options.fontSize; cl = rule
+            ns = metrics.num2 * effectiveOptions.fontSize; ds = metrics.denom2 * effectiveOptions.fontSize; cl = gapClear
         }
         let nb = ns - numBox.depth, nc = nb - (axis + 0.5 * rule); if nc < cl { ns += (cl - nc) }
         let dt = denBox.height - ds, dc = (axis - 0.5 * rule) - dt; if dc < cl { ds += (cl - dc) }
-        let rw = max(numBox.width, denBox.width) + (options.fontSize * 0.1), no = (rw - numBox.width) / 2,
+        let rw = max(numBox.width, denBox.width) + (effectiveOptions.fontSize * (hasRule ? 0.1 : 0.0)),
+            no = (rw - numBox.width) / 2,
             dof = (rw - denBox.width) / 2
-        return VerticalBox(
-            elements: [
-                VerticalBox.Element(node: HorizontalBox(children: [SpaceNode(width: dof), denominator]), shift: -ds),
+        var elems: [VerticalBox.Element] = [
+            VerticalBox.Element(node: HorizontalBox(children: [SpaceNode(width: dof), denominator]), shift: -ds),
+        ]
+        if hasRule {
+            elems.append(
                 VerticalBox.Element(
                     node: RuleNode(width: rw, height: rule, role: .fractionBar),
                     shift: axis - 0.5 * rule
-                ),
-                VerticalBox.Element(node: HorizontalBox(children: [SpaceNode(width: no), numerator]), shift: ns),
+                )
+            )
+        }
+        elems.append(VerticalBox.Element(node: HorizontalBox(children: [SpaceNode(width: no), numerator]), shift: ns))
+        return VerticalBox(elements: elems, position: .individualShift)
+    }
+
+    private func buildOverlineUnderlineNode(
+        _ node: ParseNode,
+        options: FormulaKit.Options,
+        isOver: Bool
+    ) -> LayoutNode {
+        guard let c = node.children.first else { return SpaceNode(width: 0) }
+        let body = buildLayoutNode(c, options: options)
+        let box = body.getBox(options: options)
+        let rule = options.resolvedMathFont.layout.fractionRuleThicknessEm * options.fontSize
+        let gap = 2.5 * rule
+        let line = RuleNode(width: box.width, height: rule, role: .horizontalLine)
+        if isOver {
+            return VerticalBox(
+                elements: [
+                    VerticalBox.Element(node: body, shift: 0),
+                    VerticalBox.Element(node: line, shift: box.height + gap),
+                ],
+                position: .individualShift
+            )
+        } else {
+            return VerticalBox(
+                elements: [
+                    VerticalBox.Element(node: body, shift: 0),
+                    VerticalBox.Element(node: line, shift: -(box.depth + gap + rule)),
+                ],
+                position: .individualShift
+            )
+        }
+    }
+
+    private func buildBoxedNode(_ node: ParseNode, options: FormulaKit.Options) -> LayoutNode {
+        guard let c = node.children.first else { return SpaceNode(width: 0) }
+        let body = buildLayoutNode(c, options: options)
+        let box = body.getBox(options: options)
+        let rule = options.resolvedMathFont.layout.fractionRuleThicknessEm * options.fontSize
+        let pad = options.fontSize * 0.22
+        return BoxedDecorationNode(content: body, contentBox: box, pad: pad, rule: rule)
+    }
+
+    private func buildCancelNode(_ node: ParseNode, options: FormulaKit.Options, mode: String) -> LayoutNode {
+        guard let c = node.children.first else { return SpaceNode(width: 0) }
+        let body = buildLayoutNode(c, options: options)
+        let box = body.getBox(options: options)
+        let rule = options.resolvedMathFont.layout.fractionRuleThicknessEm * options.fontSize
+        return CancelDecorationNode(content: body, contentBox: box, rule: rule, mode: mode)
+    }
+
+    private func buildPmodNode(_ node: ParseNode, options: FormulaKit.Options) -> LayoutNode {
+        guard let c = node.children.first else { return SpaceNode(width: 0) }
+        let arg = buildLayoutNode(c, options: options)
+        let modText = buildOperatorNameNode(
+            ParseNode(type: .function, value: "operatorname", children: [ParseNode(type: .symbol, value: "mod")]),
+            options: options
+        )
+        let openP = SymbolNode(character: "(", type: .mopen, fontName: MathLogicalFontNames.mainRegular, fontSize: options.fontSize)
+        let closeP = SymbolNode(character: ")", type: .mclose, fontName: MathLogicalFontNames.mainRegular, fontSize: options.fontSize)
+        return HorizontalBox(
+            children: [
+                SpaceNode(width: options.fontSize * 0.45),
+                openP,
+                modText,
+                SpaceNode(width: spaceWidthMu(6, options: options)),
+                arg,
+                closeP,
             ],
-            position: .individualShift
+            type: .mord
         )
     }
 
@@ -1378,7 +1596,8 @@ public struct Renderer {
             overline = RuleNode(width: contentBox.width - joinKern + padRight, height: rule, role: .radicalVinculum),
             oshift = contentBox.height + cl
         let shiftedOverline = HorizontalBox(children: [SpaceNode(width: joinKern), overline])
-        return HorizontalBox(children: [
+
+        var children: [LayoutNode] = [
             VerticalBox(elements: [VerticalBox.Element(node: radical, shift: -ishift)], position: .individualShift),
             VerticalBox(
                 elements: [
@@ -1388,7 +1607,114 @@ public struct Renderer {
                 position: .individualShift
             ),
             SpaceNode(width: padRight),
-        ])
+        ]
+
+        // Optional nth-root index `\sqrt[n]{x}`
+        if node.children.count >= 2 {
+            let rootOpts = options.withStyle(.scriptScript)
+            let rootIdx = buildLayoutNode(node.children[0], options: rootOpts)
+            let rootBox = rootIdx.getBox(options: rootOpts)
+            let radTop = radicalBox.height - ishift
+            let radBot = -radicalBox.depth - ishift
+            let rootShift = max(
+                radBot + 0.68 * (radTop - radBot) + options.fontSize * 0.06 + rootBox.depth,
+                options.fontSize * 0.52 + rootBox.depth
+            )
+            let overlapKern = -radicalBox.width * 0.28
+            let leadPad = max(0, -overlapKern - rootBox.width + options.fontSize * 0.12)
+            let rootVBox = VerticalBox(
+                elements: [VerticalBox.Element(node: rootIdx, shift: rootShift)],
+                position: .individualShift
+            )
+            let prefix: [LayoutNode] = [SpaceNode(width: leadPad), rootVBox, SpaceNode(width: overlapKern)]
+            children.insert(contentsOf: prefix, at: 0)
+        }
+
+        return HorizontalBox(children: children)
+    }
+}
+
+private struct BoxedDecorationNode: LayoutNode {
+    let content: LayoutNode
+    let contentBox: Box
+    let pad: CGFloat
+    let rule: CGFloat
+    var type: AtomType { .mord }
+
+    func getBox(options _: FormulaKit.Options) -> Box {
+        Box(
+            width: contentBox.width + 2 * (pad + rule),
+            height: contentBox.height + pad + rule,
+            depth: contentBox.depth + pad + rule
+        )
+    }
+
+    func collectTextRuns(at origin: CGPoint, options: FormulaKit.Options) -> [MathTextRun] {
+        content.collectTextRuns(at: CGPoint(x: origin.x + pad + rule, y: origin.y), options: options)
+    }
+
+    func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
+        var path = content.renderDecoration(at: CGPoint(x: origin.x + pad + rule, y: origin.y), options: options)
+        let w = contentBox.width + 2 * (pad + rule)
+        let topY = origin.y + contentBox.height + pad
+        let botY = origin.y - contentBox.depth - pad - rule
+        let totalH = topY + rule - botY
+        let provider = options.resolvedMathFont
+        path.addPath(provider.renderRulePath(rect: CGRect(x: origin.x, y: topY, width: w, height: rule), role: .horizontalLine, options: options))
+        path.addPath(provider.renderRulePath(rect: CGRect(x: origin.x, y: botY, width: w, height: rule), role: .horizontalLine, options: options))
+        path.addPath(MathPath(rect: CGRect(x: origin.x, y: botY, width: rule, height: totalH)))
+        path.addPath(MathPath(rect: CGRect(x: origin.x + w - rule, y: botY, width: rule, height: totalH)))
+        return path
+    }
+}
+
+private struct CancelDecorationNode: LayoutNode {
+    let content: LayoutNode
+    let contentBox: Box
+    let rule: CGFloat
+    let mode: String
+    var type: AtomType { content.type }
+
+    func getBox(options _: FormulaKit.Options) -> Box {
+        Box(
+            width: contentBox.width,
+            height: contentBox.height + rule * 2,
+            depth: contentBox.depth + rule * 2,
+            italicCorrection: contentBox.italicCorrection
+        )
+    }
+
+    func collectTextRuns(at origin: CGPoint, options: FormulaKit.Options) -> [MathTextRun] {
+        content.collectTextRuns(at: origin, options: options)
+    }
+
+    func renderDecoration(at origin: CGPoint, options: FormulaKit.Options) -> MathPath {
+        var path = content.renderDecoration(at: origin, options: options)
+        let x0 = origin.x
+        let x1 = origin.x + contentBox.width
+        let y0 = origin.y - contentBox.depth - rule * 1.5
+        let y1 = origin.y + contentBox.height + rule * 1.5
+        let r = rule * 0.5
+
+        func addSlash(from a: CGPoint, to b: CGPoint) {
+            let dx = b.x - a.x, dy = b.y - a.y
+            let len = hypot(dx, dy)
+            guard len > 1e-4 else { return }
+            let nx = -dy / len * r, ny = dx / len * r
+            path.move(to: CGPoint(x: a.x + nx, y: a.y + ny))
+            path.addLine(to: CGPoint(x: b.x + nx, y: b.y + ny))
+            path.addLine(to: CGPoint(x: b.x - nx, y: b.y - ny))
+            path.addLine(to: CGPoint(x: a.x - nx, y: a.y - ny))
+            path.closeSubpath()
+        }
+
+        if mode == "cancel" || mode == "xcancel" {
+            addSlash(from: CGPoint(x: x0, y: y0), to: CGPoint(x: x1, y: y1))
+        }
+        if mode == "bcancel" || mode == "xcancel" {
+            addSlash(from: CGPoint(x: x0, y: y1), to: CGPoint(x: x1, y: y0))
+        }
+        return path
     }
 }
 

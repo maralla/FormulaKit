@@ -79,7 +79,13 @@ public enum GaeguMath {
         case MathLogicalFontNames.size4Regular:
             return sizeSlotGlyphName(forScalar: v, character: character, sizeTier: 4)
         case MathLogicalFontNames.mainRegular:
-            return v == 0x002D ? "uni2212" : nil
+            switch v {
+            case 0x002D: return "uni2212"
+            case 0x2032: return "minute.ssty"
+            case 0x2033: return "second.ssty"
+            case 0x2034: return "uni2034.ssty"
+            default: return nil
+            }
         default:
             return nil
         }
@@ -194,12 +200,18 @@ public struct GaeguMathFontProvider: MathFontProviding {
 
     public func mathbbMappedLetter(_ character: Character) -> String? { STIX.mathbbMappedLetter(character) }
 
+    public func mathfrakMappedLetter(_ character: Character) -> String? { STIX.mathfrakMappedLetter(character) }
+
     public func openTypeMathStretchDelimiterGlyphNames(for character: String) -> [String] {
         STIX.openTypeMathStretchDelimiterGlyphNames(for: character)
     }
 
     public func openTypeMatchingStretchDelimiterGlyphName(character: String, templateGlyphName: String?) -> String? {
         STIX.openTypeMatchingDelimiterGlyphName(character: character, templateGlyphName: templateGlyphName)
+    }
+
+    public func openTypeMathWideAccentGlyphNames(for accentCommand: String) -> [String] {
+        STIX.openTypeMathWideAccentGlyphNames(for: accentCommand)
     }
 
     public func openTypeGlyphName(logicalFontName: String, character: String, textMode: Bool) -> String? {

@@ -120,11 +120,13 @@ public protocol MathFontProviding: Sendable {
     func mathcalMappedLetter(_ character: Character) -> String?
     func isCaligraphicScriptCapital(character: String, logicalFontName: String) -> Bool
     func mathbbMappedLetter(_ character: Character) -> String?
+    func mathfrakMappedLetter(_ character: Character) -> String?
 
     // MARK: - OpenType math delimiter & glyph variants
 
     func openTypeMathStretchDelimiterGlyphNames(for character: String) -> [String]
     func openTypeMatchingStretchDelimiterGlyphName(character: String, templateGlyphName: String?) -> String?
+    func openTypeMathWideAccentGlyphNames(for accentCommand: String) -> [String]
     func openTypeGlyphName(logicalFontName: String, character: String, textMode: Bool) -> String?
 
     // MARK: - Horizontal ``\overbrace`` / ``\underbrace`` & Rules
@@ -181,10 +183,12 @@ extension MathFontProviding {
     public func mathcalMappedLetter(_: Character) -> String? { nil }
     public func isCaligraphicScriptCapital(character _: String, logicalFontName _: String) -> Bool { false }
     public func mathbbMappedLetter(_: Character) -> String? { nil }
+    public func mathfrakMappedLetter(_: Character) -> String? { nil }
     public func openTypeMathStretchDelimiterGlyphNames(for _: String) -> [String] { [] }
     public func openTypeMatchingStretchDelimiterGlyphName(character _: String, templateGlyphName _: String?) -> String? {
         nil
     }
+    public func openTypeMathWideAccentGlyphNames(for _: String) -> [String] { [] }
     public func openTypeGlyphName(logicalFontName _: String, character _: String, textMode _: Bool) -> String? { nil }
     public func renderRulePath(rect: CGRect, role _: MathRuleRole, options _: FormulaKit.Options) -> MathPath {
         MathPath(rect: rect)

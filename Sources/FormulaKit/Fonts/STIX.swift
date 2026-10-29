@@ -188,7 +188,43 @@ enum STIX {
         if let v = character.unicodeScalars.first?.value, v >= 0x61, v <= 0x7A {
             return String(UnicodeScalar(0x1D552 + UInt32(v - 0x61))!)
         }
+        if let v = character.unicodeScalars.first?.value, v >= 0x30, v <= 0x39 {
+            return String(UnicodeScalar(0x1D7D8 + UInt32(v - 0x30))!)
+        }
         return nil
+    }
+
+    private static let mathfrakCapitalScalars: [UnicodeScalar] = [
+        UnicodeScalar(0x1D504)!, UnicodeScalar(0x1D505)!, UnicodeScalar(0x212D)!, UnicodeScalar(0x1D507)!,
+        UnicodeScalar(0x1D508)!, UnicodeScalar(0x1D509)!, UnicodeScalar(0x1D50A)!, UnicodeScalar(0x210C)!,
+        UnicodeScalar(0x2111)!, UnicodeScalar(0x1D50D)!, UnicodeScalar(0x1D50E)!, UnicodeScalar(0x1D50F)!,
+        UnicodeScalar(0x1D510)!, UnicodeScalar(0x1D511)!, UnicodeScalar(0x1D512)!, UnicodeScalar(0x1D513)!,
+        UnicodeScalar(0x1D514)!, UnicodeScalar(0x211C)!, UnicodeScalar(0x1D516)!, UnicodeScalar(0x1D517)!,
+        UnicodeScalar(0x1D518)!, UnicodeScalar(0x1D519)!, UnicodeScalar(0x1D51A)!, UnicodeScalar(0x1D51B)!,
+        UnicodeScalar(0x1D51C)!, UnicodeScalar(0x2128)!,
+    ]
+
+    static func mathfrakMappedLetter(_ character: Character) -> String? {
+        if let v = character.unicodeScalars.first?.value, v >= 0x41, v <= 0x5A {
+            return String(mathfrakCapitalScalars[Int(v - 0x41)])
+        }
+        if let v = character.unicodeScalars.first?.value, v >= 0x61, v <= 0x7A {
+            return String(UnicodeScalar(0x1D51E + UInt32(v - 0x61))!)
+        }
+        return nil
+    }
+
+    static func openTypeMathWideAccentGlyphNames(for accentCommand: String) -> [String] {
+        let base: String
+        switch accentCommand {
+        case "\\widehat", "\\hat": base = "circumflex"
+        case "\\widetilde", "\\tilde": base = "tilde"
+        case "\\widecheck", "\\check": base = "caroncomb"
+        case "\\overrightarrow", "\\vec": base = "uni20D7"
+        case "\\overleftarrow": base = "uni20D6"
+        default: return []
+        }
+        return (1...5).map { "\(base).s\($0)" }
     }
 }
 
@@ -367,12 +403,18 @@ public struct STIXMathFontProvider: MathFontProviding {
 
     public func mathbbMappedLetter(_ character: Character) -> String? { STIX.mathbbMappedLetter(character) }
 
+    public func mathfrakMappedLetter(_ character: Character) -> String? { STIX.mathfrakMappedLetter(character) }
+
     public func openTypeMathStretchDelimiterGlyphNames(for character: String) -> [String] {
         STIX.openTypeMathStretchDelimiterGlyphNames(for: character)
     }
 
     public func openTypeMatchingStretchDelimiterGlyphName(character: String, templateGlyphName: String?) -> String? {
         STIX.openTypeMatchingDelimiterGlyphName(character: character, templateGlyphName: templateGlyphName)
+    }
+
+    public func openTypeMathWideAccentGlyphNames(for accentCommand: String) -> [String] {
+        STIX.openTypeMathWideAccentGlyphNames(for: accentCommand)
     }
 
     public func openTypeGlyphName(logicalFontName: String, character: String, textMode: Bool) -> String? {

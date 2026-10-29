@@ -52,72 +52,115 @@ public struct MathSymbols {
         "pi": "π", "rho": "ρ", "sigma": "σ", "tau": "τ", "upsilon": "υ",
         "phi": "φ", "chi": "χ", "psi": "ψ", "omega": "ω",
         "varepsilon": "\u{03F5}", "vartheta": "ϑ", "varpi": "ϖ", "varrho": "ϱ",
-        "varsigma": "ς", "varphi": "\u{03D5}",
+        "varsigma": "ς", "varphi": "\u{03D5}", "varkappa": "ϰ", "digamma": "ϝ",
 
         // Capital Greek letters
-        "Gamma": "Γ", "Delta": "Δ", "Theta": "Θ", "Lambda": "Λ", "Xi": "Ξ",
-        "Pi": "Π", "Sigma": "Σ", "Upsilon": "Υ", "Phi": "Φ", "Psi": "Ψ", "Omega": "Ω",
+        "Alpha": "Α", "Beta": "Β", "Gamma": "Γ", "Delta": "Δ", "Epsilon": "Ε",
+        "Zeta": "Ζ", "Eta": "Η", "Theta": "Θ", "Iota": "Ι", "Kappa": "Κ",
+        "Lambda": "Λ", "Mu": "Μ", "Nu": "Ν", "Xi": "Ξ", "Omicron": "Ο",
+        "Pi": "Π", "Rho": "Ρ", "Sigma": "Σ", "Tau": "Τ", "Upsilon": "Υ",
+        "Phi": "Φ", "Chi": "Χ", "Psi": "Ψ", "Omega": "Ω",
 
         // Binary operators
-        "pm": "±", "mp": "∓", "times": "×", "div": "÷", "cdot": "\u{22C5}", "odot": "\u{2299}",
-        "ast": "∗", "star": "⋆", "circ": "∘", "bullet": "•",
+        "pm": "±", "mp": "∓", "times": "×", "div": "÷", "cdot": "\u{22C5}", "centerdot": "\u{22C5}",
+        "odot": "\u{2299}", "ast": "∗", "star": "⋆", "circ": "∘", "bullet": "•",
         "wedge": "∧", "vee": "∨", "land": "∧", "lor": "∨", "cap": "∩", "cup": "∪",
         "uplus": "⊎", "sqcap": "⊓", "sqcup": "⊔", "ominus": "⊖", "bigcirc": "◯",
-        "wr": "≀", "amalg": "⨿", "And": "&", "oplus": "⊕", "otimes": "⊗",
+        "wr": "≀", "amalg": "⨿", "And": "&", "oplus": "⊕", "otimes": "⊗", "oslash": "⊘",
         "setminus": "∖", "smallsetminus": "∖",
+        "boxplus": "⊞", "boxminus": "⊟", "boxtimes": "⊠", "boxdot": "⊡",
+        "triangleleft": "◁", "triangleright": "▷", "ltimes": "⋉", "rtimes": "⋊",
+        "divideontimes": "⋇", "intercal": "⊺", "veebar": "⊻", "barwedge": "⊼",
+        "dagger": "†", "ddagger": "‡", "Cap": "⋒", "Cup": "⋓",
 
         // Relation operators
-        "approx": "≈", "equiv": "≡", "propto": "∝", "ne": "≠", "neq": "≠",
-        "le": "≤", "leq": "≤", "ge": "≥", "geq": "≥", "leqslant": "⩽", "geqslant": "⩾",
-        "sim": "∼", "cong": "≅",
-        "prec": "≺", "succ": "≻", "preceq": "⪯", "succeq": "⪰", "simeq": "≃", "asymp": "≍",
-        "ll": "≪", "gg": "≫", "mid": "∣", "parallel": "∥", "perp": "⊥", "bowtie": "⋈",
-        "smile": "⌣", "frown": "⌢", "ni": "∋", "owns": "∋", "vdash": "⊢", "dashv": "⊣",
-        "doteq": "≐", "sqsubseteq": "⊑", "sqsupseteq": "⊒",
+        "approx": "≈", "napprox": "≉", "equiv": "≡", "nequiv": "≢", "propto": "∝", "varpropto": "∝",
+        "ne": "≠", "neq": "≠", "le": "≤", "leq": "≤", "ge": "≥", "geq": "≥",
+        "leqslant": "⩽", "geqslant": "⩾", "nleq": "≰", "ngeq": "≱", "nless": "≮", "ngtr": "≯",
+        "sim": "∼", "nsim": "≁", "cong": "≅", "ncong": "≇", "simeq": "≃", "asymp": "≍",
+        "prec": "≺", "succ": "≻", "preceq": "⪯", "succeq": "⪰",
+        "ll": "≪", "gg": "≫", "lll": "⋘", "ggg": "⋙", "lesssim": "≲", "gtrsim": "≳",
+        "mid": "∣", "nmid": "∤", "parallel": "∥", "nparallel": "∦", "perp": "⊥", "bowtie": "⋈", "Join": "⋈",
+        "smile": "⌣", "frown": "⌢", "ni": "∋", "owns": "∋",
+        "vdash": "⊢", "dashv": "⊣", "Vdash": "⊩", "nvdash": "⊬", "nvDash": "⊭",
+        "doteq": "≐", "triangleq": "≜", "circeq": "≗",
+        "sqsubset": "⊏", "sqsupset": "⊐", "sqsubseteq": "⊑", "sqsupseteq": "⊒",
         "subseteq": "⊆", "supseteq": "⊇", "subseteqq": "⫅", "supseteqq": "⫆",
+        "nsubseteq": "⊈", "nsupseteq": "⊉", "subsetneq": "⊊", "supsetneq": "⊋",
         "models": "⊨", "therefore": "∴", "because": "∵",
-        "implies": "⟹", "iff": "⟺",
+        "implies": "⟹", "impliedby": "⟸", "iff": "⟺",
         "colon": "\u{2236}",
-        "ldots": "\u{2026}", "cdots": "\u{22EF}", "vdots": "\u{22EE}", "ddots": "\u{22F1}",
+        "ldots": "\u{2026}", "dots": "\u{2026}", "cdots": "\u{22EF}", "vdots": "\u{22EE}", "ddots": "\u{22F1}",
 
         // Arrows
         "leftarrow": "←", "Leftarrow": "⇐", "rightarrow": "→", "Rightarrow": "⇒",
         "to": "→", "gets": "←",
         "leftrightarrow": "↔", "Leftrightarrow": "⇔", "uparrow": "↑", "Uparrow": "⇑",
-        "downarrow": "↓", "Downarrow": "⇓",
+        "downarrow": "↓", "Downarrow": "⇓", "updownarrow": "↕", "Updownarrow": "⇕",
         "longleftarrow": "⟵", "Longleftarrow": "⟸", "longrightarrow": "⟶", "Longrightarrow": "⟹",
         "longleftrightarrow": "⟷", "Longleftrightarrow": "⟺",
         "mapsto": "↦", "longmapsto": "⟼",
         "nearrow": "↗", "searrow": "↘", "swarrow": "↙", "nwarrow": "↖",
         "hookleftarrow": "↩", "hookrightarrow": "↪",
         "leftharpoonup": "↼", "rightharpoonup": "⇀", "leftharpoondown": "↽", "rightharpoondown": "⇁",
-        "rightleftharpoons": "⇌",
+        "upharpoonleft": "↿", "upharpoonright": "↾", "downharpoonleft": "⇃", "downharpoonright": "⇂",
+        "rightleftharpoons": "⇌", "leftrightharpoons": "⇋",
+        "leadsto": "⇝", "rightsquigarrow": "⇝", "leftrightsquigarrow": "↭",
+        "twoheadleftarrow": "↞", "twoheadrightarrow": "↠",
+        "leftarrowtail": "↢", "rightarrowtail": "↣",
+        "curvearrowleft": "↶", "curvearrowright": "↷",
+        "circlearrowleft": "↺", "circlearrowright": "↻",
+        "upuparrows": "⇈", "downdownarrows": "⇊", "leftleftarrows": "⇇", "rightrightarrows": "⇉",
+        "leftrightarrows": "⇆", "rightleftarrows": "⇄", "multimap": "⊸",
 
         // Miscellaneous symbols
         "infty": "∞", "nabla": "∇", "partial": "∂", "forall": "∀", "exists": "∃",
-        "nexists": "∄", "emptyset": "∅", "in": "∈", "notin": "∉", "subset": "⊂",
-        "supset": "⊃",
-        "aleph": "ℵ", "hbar": "ℏ", "ell": "ℓ", "wp": "℘", "Re": "ℜ", "Im": "ℑ",
-        "angle": "∠", "triangle": "△",
+        "nexists": "∄", "emptyset": "∅", "varnothing": "∅", "complement": "∁",
+        "neg": "¬", "lnot": "¬", "top": "⊤", "bot": "⊥",
+        "in": "∈", "notin": "∉", "subset": "⊂", "supset": "⊃",
+        "aleph": "ℵ", "beth": "ℶ", "gimel": "ℷ", "daleth": "ℸ",
+        "hbar": "ℏ", "hslash": "ℏ", "ell": "ℓ", "wp": "℘", "Re": "ℜ", "Im": "ℑ", "mho": "℧",
+        "prime": "′", "backprime": "‵", "surd": "√",
+        "angle": "∠", "measuredangle": "∡", "sphericalangle": "∢",
+        "triangle": "△", "vartriangle": "△", "triangledown": "▽",
+        "blacktriangle": "▲", "blacktriangledown": "▼",
+        "square": "□", "Box": "□", "blacksquare": "■", "lozenge": "◊", "Diamond": "◊",
+        "bigstar": "★", "clubsuit": "♣", "diamondsuit": "♢", "heartsuit": "♡", "spadesuit": "♠",
+        "flat": "♭", "natural": "♮", "sharp": "♯", "checkmark": "✓", "degree": "°",
 
         // Dotless letters
-        "i": "ı", "j": "ȷ",
+        "i": "ı", "j": "ȷ", "imath": "ı", "jmath": "ȷ",
 
         // Operators with limits
-        "sum": "∑", "prod": "∏", "coprod": "∐", "int": "∫", "oint": "∮", "iint": "∬", "iiint": "∭",
+        "sum": "∑", "prod": "∏", "coprod": "∐",
+        "int": "∫", "oint": "∮", "iint": "∬", "iiint": "∭", "oiint": "∯", "oiiint": "∰",
+        "bigcap": "⋂", "bigcup": "⋃", "bigsqcup": "⨆", "bigvee": "⋁", "bigwedge": "⋀",
+        "bigodot": "⨀", "bigoplus": "⨁", "bigotimes": "⨂", "biguplus": "⨄",
 
         // Common functions
         "sin": "sin", "cos": "cos", "tan": "tan", "cot": "cot", "sec": "sec", "csc": "csc",
-        "sinh": "sinh", "cosh": "cosh", "tanh": "tanh",
-        "arcsin": "arcsin", "arccos": "arccos", "arctan": "arctan", "ln": "ln", "log": "log",
-        "exp": "exp", "lim": "lim", "sup": "sup", "inf": "inf", "max": "max", "min": "min",
-        "det": "det", "arg": "arg", "gcd": "gcd", "Pr": "Pr",
+        "sinh": "sinh", "cosh": "cosh", "tanh": "tanh", "coth": "coth", "sech": "sech", "csch": "csch",
+        "arcsin": "arcsin", "arccos": "arccos", "arctan": "arctan", "arccot": "arccot",
+        "arcsec": "arcsec", "arccsc": "arccsc", "arsinh": "arsinh", "arcosh": "arcosh", "artanh": "artanh",
+        "ln": "ln", "log": "log", "lg": "lg", "exp": "exp",
+        "lim": "lim", "limsup": "limsup", "liminf": "liminf",
+        "sup": "sup", "inf": "inf", "max": "max", "min": "min", "argmin": "argmin", "argmax": "argmax",
+        "det": "det", "dim": "dim", "ker": "ker", "hom": "hom", "im": "im", "deg": "deg",
+        "arg": "arg", "gcd": "gcd", "lcm": "lcm", "Pr": "Pr",
+        "sgn": "sgn", "tr": "tr", "trace": "trace", "rank": "rank", "diag": "diag", "erf": "erf",
 
         // Delimiters
         "lbrace": "{", "rbrace": "}", "vert": "|", "Vert": "‖", "langle": "⟨", "rangle": "⟩",
         "lfloor": "⌊", "rfloor": "⌋", "lceil": "⌈", "rceil": "⌉",
         "lbrack": "[", "rbrack": "]", "lgroup": "⟮", "rgroup": "⟯",
-        "lmoustache": "⎰", "rmoustache": "⎱",
+        "lmoustache": "⎰", "rmoustache": "⎱", "llbracket": "⟦", "rrbracket": "⟧",
+    ]
+
+    public static let negatedRelations: [String: String] = [
+        "=": "≠", "<": "≮", ">": "≯", "≤": "≰", "≥": "≱", "⩽": "≰", "⩾": "≱",
+        "∈": "∉", "∋": "∌", "≡": "≢", "∼": "≁", "≈": "≉", "≅": "≇", "≃": "≄",
+        "⊂": "⊄", "⊃": "⊅", "⊆": "⊈", "⊇": "⊉", "⊑": "⋢", "⊒": "⋣",
+        "∣": "∤", "∥": "∦", "⊢": "⊬", "⊨": "⊭", "∃": "∄", "≺": "⊀", "≻": "⊁",
     ]
 
     /// Maps special LaTeX symbols to their Unicode equivalents.
@@ -176,7 +219,8 @@ public struct Parser {
 
             var node = try parseAtom()
 
-            if node.type == .function && node.value == "over" {
+            if node.type == .function && (node.value == "over" || node.value == "choose" || node.value == "atop") {
+                let op = node.value
                 let numerator = ParseNode(type: .group, value: "", children: nodes)
                 let denominator = try parseExpression(
                     until: delimiters,
@@ -185,24 +229,90 @@ public struct Parser {
                     stopOnMiddle: stopOnMiddle
                 )
                 return [
-                    ParseNode(
-                        type: .function,
-                        value: "frac",
-                        children: [numerator, ParseNode(type: .group, value: "", children: denominator)]
+                    makeInfixFractionNode(
+                        op: op,
+                        numerator: numerator,
+                        denominator: ParseNode(type: .group, value: "", children: denominator)
                     )
                 ]
             }
 
-            var scripts: [ParseNode] = []
-            while !isAtEnd && (input[position] == "^" || input[position] == "_") {
-                scripts.append(try parseScript())
-            }
-            if !scripts.isEmpty {
-                node = ParseNode(type: .function, value: "supsub", children: [node] + scripts)
-            }
+            node = try parseAttachedScriptsAndPrimes(base: node)
             nodes.append(node)
         }
         return nodes
+    }
+
+    private func makeInfixFractionNode(op: String, numerator: ParseNode, denominator: ParseNode) -> ParseNode {
+        if op == "choose" {
+            let frac = ParseNode(type: .function, value: "atop", children: [numerator, denominator])
+            return ParseNode(
+                type: .function,
+                value: "leftright",
+                children: [ParseNode(type: .symbol, value: "("), frac, ParseNode(type: .symbol, value: ")")]
+            )
+        }
+        let fnName = (op == "atop") ? "atop" : "frac"
+        return ParseNode(type: .function, value: fnName, children: [numerator, denominator])
+    }
+
+    private mutating func parseAttachedScriptsAndPrimes(base: ParseNode) throws -> ParseNode {
+        var node = base
+        var limitsMode: String?
+        while true {
+            skipWhitespace()
+            if checkCommand("limits") {
+                try consumeCommand(named: "limits")
+                limitsMode = "limits"
+            } else if checkCommand("nolimits") {
+                try consumeCommand(named: "nolimits")
+                limitsMode = "nolimits"
+            } else {
+                break
+            }
+        }
+        var scripts: [ParseNode] = []
+        var primeCount = 0
+        while !isAtEnd && input[position] == "'" {
+            advance()
+            primeCount += 1
+        }
+        var primeNodes: [ParseNode] = []
+        while primeCount > 0 {
+            if primeCount >= 3 {
+                primeNodes.append(ParseNode(type: .symbol, value: "‴"))
+                primeCount -= 3
+            } else if primeCount == 2 {
+                primeNodes.append(ParseNode(type: .symbol, value: "″"))
+                primeCount -= 2
+            } else {
+                primeNodes.append(ParseNode(type: .symbol, value: "′"))
+                primeCount -= 1
+            }
+        }
+        while !isAtEnd && (input[position] == "^" || input[position] == "_") {
+            let sc = try parseScript()
+            if sc.value == "sup" && !primeNodes.isEmpty {
+                let combined = primeNodes + sc.children
+                primeNodes.removeAll()
+                scripts.append(
+                    ParseNode(type: .function, value: "sup", children: [ParseNode(type: .group, value: "", children: combined)])
+                )
+            } else {
+                scripts.append(sc)
+            }
+        }
+        if !primeNodes.isEmpty {
+            scripts.insert(
+                ParseNode(type: .function, value: "sup", children: [ParseNode(type: .group, value: "", children: primeNodes)]),
+                at: 0
+            )
+        }
+        if !scripts.isEmpty {
+            let fnVal = limitsMode.map { "supsub:\($0)" } ?? "supsub"
+            node = ParseNode(type: .function, value: fnVal, children: [node] + scripts)
+        }
+        return node
     }
 
     /// True if there is a `)` later that balances this `(`, using a raw character scan (same as nesting for plain TeX).
@@ -257,28 +367,20 @@ public struct Parser {
 
             var node = try parseAtom()
 
-            if node.type == .function && node.value == "over" {
+            if node.type == .function && (node.value == "over" || node.value == "choose" || node.value == "atop") {
+                let op = node.value
                 let numerator = ParseNode(type: .group, value: "", children: nodes)
                 let denominator = try parseDelimitedBalanced(closing: closing)
                 return [
-                    ParseNode(
-                        type: .function,
-                        value: "frac",
-                        children: [
-                            numerator,
-                            ParseNode(type: .group, value: "", children: denominator),
-                        ]
+                    makeInfixFractionNode(
+                        op: op,
+                        numerator: numerator,
+                        denominator: ParseNode(type: .group, value: "", children: denominator)
                     )
                 ]
             }
 
-            var scripts: [ParseNode] = []
-            while !isAtEnd && (input[position] == "^" || input[position] == "_") {
-                scripts.append(try parseScript())
-            }
-            if !scripts.isEmpty {
-                node = ParseNode(type: .function, value: "supsub", children: [node] + scripts)
-            }
+            node = try parseAttachedScriptsAndPrimes(base: node)
             nodes.append(node)
         }
     }
@@ -396,7 +498,10 @@ public struct Parser {
         advance()  // Skip \
         if isAtEnd { throw FormulaKit.ParseError("Expected command name") }
 
-        let accents = ["acute", "grave", "ddot", "tilde", "bar", "breve", "check", "hat", "vec", "dot"]
+        let accents = [
+            "acute", "grave", "ddot", "tilde", "bar", "breve", "check", "hat", "vec", "dot",
+            "widehat", "widetilde", "widecheck", "overrightarrow", "overleftarrow", "overleftrightarrow",
+        ]
         let textAccents = ["'", "`", "^", "~", "=", "u", ".", "\"", "c", "r", "H", "v"]
 
         if !isLetter(input[position]) {
@@ -443,7 +548,7 @@ public struct Parser {
         if let symbol = MathSymbols.getSymbolForCommand(name) { return ParseNode(type: .symbol, value: symbol) }
 
         switch name {
-        case "frac", "dfrac": return try parseFraction(name: name)
+        case "frac", "dfrac", "tfrac", "cfrac": return try parseFraction(name: name)
         case "binom": return try parseBinom()
         case "tbinom":
             return ParseNode(type: .style, value: "textstyle", children: [try parseBinom()])
@@ -453,9 +558,26 @@ public struct Parser {
         case "begin": return try parseEnvironment()
         case "left": return try parseLeftRight()
         case "text": return try parseText()
+        case "textbf":
+            return ParseNode(type: .style, value: "mathbf", children: [try parseText()])
+        case "textit":
+            return ParseNode(type: .style, value: "mathit", children: [try parseText()])
+        case "textrm":
+            return try parseText()
+        case "textsf":
+            return ParseNode(type: .style, value: "mathsf", children: [try parseText()])
+        case "texttt":
+            return ParseNode(type: .style, value: "mathtt", children: [try parseText()])
         case "tag": return try parseTag()
-        case "mathbb", "mathbf", "mathit", "mathrm", "mathsf", "mathtt", "mathcal", "boldsymbol":
-            return try parseStyle(name: name)
+        case "mathbb", "Bbb": return try parseStyle(name: "mathbb")
+        case "mathbf", "bf": return try parseStyle(name: "mathbf")
+        case "mathit", "it": return try parseStyle(name: "mathit")
+        case "mathrm", "rm": return try parseStyle(name: "mathrm")
+        case "mathsf", "sf": return try parseStyle(name: "mathsf")
+        case "mathtt", "tt": return try parseStyle(name: "mathtt")
+        case "mathcal", "cal", "mathscr": return try parseStyle(name: "mathcal")
+        case "mathfrak", "frak": return try parseStyle(name: "mathfrak")
+        case "boldsymbol", "bm": return try parseStyle(name: "boldsymbol")
         case "displaystyle", "textstyle", "scriptstyle", "scriptscriptstyle":
             return try parseMathStyleSwitch(name: name)
         case "mathchoice":
@@ -466,36 +588,27 @@ public struct Parser {
             )
         case "overset", "underset", "stackrel":
             return try parseOversetUnderset(name: name == "stackrel" ? "overset" : name)
-        case "xrightarrow":
-            return ParseNode(
-                type: .function,
-                value: "overset",
-                children: [try parseArgument(), ParseNode(type: .symbol, value: "→")]
-            )
-        case "xleftarrow":
-            return ParseNode(
-                type: .function,
-                value: "overset",
-                children: [try parseArgument(), ParseNode(type: .symbol, value: "←")]
-            )
-        case "xRightarrow":
-            return ParseNode(
-                type: .function,
-                value: "overset",
-                children: [try parseArgument(), ParseNode(type: .symbol, value: "⇒")]
-            )
-        case "xLeftarrow":
-            return ParseNode(
-                type: .function,
-                value: "overset",
-                children: [try parseArgument(), ParseNode(type: .symbol, value: "⇐")]
-            )
-        case "xlongequal":
-            return ParseNode(
-                type: .function,
-                value: "overset",
-                children: [try parseArgument(), ParseNode(type: .symbol, value: "=")]
-            )
+        case "xrightarrow": return try parseExtensibleArrow(arrow: "→")
+        case "xleftarrow": return try parseExtensibleArrow(arrow: "←")
+        case "xRightarrow": return try parseExtensibleArrow(arrow: "⇒")
+        case "xLeftarrow": return try parseExtensibleArrow(arrow: "⇐")
+        case "xleftrightarrow": return try parseExtensibleArrow(arrow: "↔")
+        case "xLeftrightarrow": return try parseExtensibleArrow(arrow: "⇔")
+        case "xhookrightarrow": return try parseExtensibleArrow(arrow: "↪")
+        case "xhookleftarrow": return try parseExtensibleArrow(arrow: "↩")
+        case "xmapsto": return try parseExtensibleArrow(arrow: "↦")
+        case "xlongequal": return try parseExtensibleArrow(arrow: "=")
+        case "overline", "underline", "boxed", "cancel", "bcancel", "xcancel":
+            return ParseNode(type: .function, value: name, children: [try parseArgumentOrAtom()])
+        case "substack":
+            return try parseSubstack()
+        case "pmod":
+            let modArg = try parseArgumentOrAtom()
+            return ParseNode(type: .function, value: "pmod", children: [modArg])
+        case "bmod", "mod":
+            return ParseNode(type: .function, value: "bmod", children: [])
+        case "not":
+            return try parseNotRelation()
         case "operatorname": return try parseOperatorName()
         case "kern", "mkern": return try parseKernLike(prefix: "kern")
         case "hskip": return try parseKernLike(prefix: "hskip")
@@ -520,7 +633,7 @@ public struct Parser {
         case "smash": return ParseNode(type: .function, value: "smash", children: [try parseArgument()])
         case "overbrace", "underbrace": return try parseHorizBrace(name: name)
         case "nonumber", "notag": return ParseNode(type: .function, value: "nonumber")
-        case "over": return ParseNode(type: .function, value: "over")
+        case "over", "choose", "atop": return ParseNode(type: .function, value: name)
         default: break
         }
 
@@ -549,6 +662,53 @@ public struct Parser {
         let over = try parseArgument()
         let base = try parseArgument()
         return ParseNode(type: .function, value: name, children: [over, base])
+    }
+
+    private mutating func parseExtensibleArrow(arrow: String) throws -> ParseNode {
+        skipWhitespace()
+        var below: ParseNode?
+        if !isAtEnd && input[position] == "[" {
+            below = ParseNode(type: .group, value: "", children: try parseBracketGroup())
+        }
+        let above = try parseArgument()
+        let base = ParseNode(type: .symbol, value: arrow)
+        if let below {
+            let under = ParseNode(type: .function, value: "underset", children: [below, base])
+            return ParseNode(type: .function, value: "overset", children: [above, under])
+        }
+        return ParseNode(type: .function, value: "overset", children: [above, base])
+    }
+
+    private mutating func parseSubstack() throws -> ParseNode {
+        skipWhitespace()
+        guard !isAtEnd && input[position] == "{" else {
+            return ParseNode(type: .style, value: "scriptstyle", children: [try parseAtom()])
+        }
+        advance()
+        var rows: [ParseNode] = []
+        while !isAtEnd && input[position] != "}" {
+            let cell = ParseNode(type: .group, value: "cell", children: try parseExpression(until: "}", stopOnRowEnd: true))
+            rows.append(ParseNode(type: .group, value: "row", children: [cell]))
+            skipWhitespace()
+            if !isAtEnd && input[position] == "\\" {
+                let next = input.index(after: position)
+                if next < input.endIndex && input[next] == "\\" {
+                    advance(); advance()
+                }
+            }
+        }
+        if !isAtEnd && input[position] == "}" { advance() }
+        return ParseNode(type: .array, value: "substack", children: rows)
+    }
+
+    private mutating func parseNotRelation() throws -> ParseNode {
+        skipWhitespace()
+        if isAtEnd { return ParseNode(type: .symbol, value: "¬") }
+        let target = try parseAtom()
+        if let neg = MathSymbols.negatedRelations[target.value] {
+            return ParseNode(type: .symbol, value: neg)
+        }
+        return ParseNode(type: .function, value: "cancel", children: [target])
     }
 
     private mutating func parseOperatorName() throws -> ParseNode {
@@ -651,7 +811,7 @@ public struct Parser {
     private mutating func parseBinom() throws -> ParseNode {
         let num = try parseArgumentOrAtom()
         let den = try parseArgumentOrAtom()
-        let frac = ParseNode(type: .function, value: "frac", children: [num, den])
+        let frac = ParseNode(type: .function, value: "atop", children: [num, den])
         return ParseNode(
             type: .function,
             value: "leftright",
@@ -755,7 +915,7 @@ public struct Parser {
         let delimiters: [String: (String, String)] = [
             "pmatrix": ("(", ")"), "bmatrix": ("[", "]"), "Bmatrix": ("\\{", "\\}"),
             "vmatrix": ("|", "|"), "Vmatrix": ("\\Vert", "\\Vert"), "cases": ("\\{", "."),
-            "rcases": (".", "\\}"),
+            "dcases": ("\\{", "."), "rcases": (".", "\\}"),
         ]
 
         if let (left, right) = delimiters[env] {

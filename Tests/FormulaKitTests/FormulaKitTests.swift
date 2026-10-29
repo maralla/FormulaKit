@@ -894,4 +894,44 @@ final class FormulaKitTests: XCTestCase {
         XCTAssertFalse(layout.textRuns.isEmpty)
         XCTAssertGreaterThan(layout.rootBox.width, 0)
     }
+
+    func testExtendedLaTeXConstructs() throws {
+        // 1. Nth-root \sqrt[n]{x}
+        let nthRoot = try FormulaKit.render(#"\sqrt[3]{x^2 + 1}"#)
+        XCTAssertTrue(nthRoot.textRuns.contains { $0.string == "3" })
+        XCTAssertGreaterThan(nthRoot.rootBox.width, try FormulaKit.render(#"\sqrt{x^2 + 1}"#).rootBox.width)
+
+        // 2. Fraktur \mathfrak{g} and \mathfrak{R}
+        let frak = try FormulaKit.render(#"\mathfrak{g} \oplus \mathfrak{R}"#)
+        let frakScalars = frak.textRuns.map(\.string).joined().unicodeScalars
+        XCTAssertTrue(frakScalars.contains { $0.value == 0x1D524 })  // 𝔤
+        XCTAssertTrue(frakScalars.contains { $0.value == 0x211C })   // ℜ
+
+        // 3. Primes f'(x) and f''(x)
+        let primes = try FormulaKit.render(#"f'(x) + f''_0(x)"#)
+        XCTAssertTrue(primes.textRuns.contains { $0.string == "′" })
+
+        // 4. \not relations
+        let notRel = try FormulaKit.render(#"a \not= b \not\in S \not\leq c"#)
+        let notStr = notRel.textRuns.map(\.string).joined()
+        XCTAssertTrue(notStr.contains("≠"))
+        XCTAssertTrue(notStr.contains("∉"))
+        XCTAssertTrue(notStr.contains("≰"))
+
+        // 5. \overline, \underline, \boxed, \cancel, \xcancel
+        let deco = try FormulaKit.render(#"\overline{z_1 + z_2} + \underline{w} + \boxed{E = mc^2} + \cancel{x} + \xcancel{y}"#)
+        XCTAssertFalse(deco.decorationPath.boundingBoxOfPath.isEmpty)
+
+        // 6. \substack, \limits, \nolimits, \choose, \tfrac, \cfrac, \pmod
+        let adv = try FormulaKit.render(
+            #"\sum_{\substack{0 \le i \le m \\ 0 < j < n}} {m \choose i} + \int\limits_0^1 \tfrac{1}{2} \, dx + \cfrac{1}{1 + \cfrac{1}{x}} \pmod{p}"#
+        )
+        XCTAssertGreaterThan(adv.rootBox.width, 0)
+
+        // 7. Wide accents & extensible arrows with optional subscript
+        let wide = try FormulaKit.render(#"\widehat{ABC} + \widetilde{xyz} + \hat{i} + \hat{j} \xrightarrow[\text{below}]{\text{above}} Y"#)
+        let wideStr = wide.textRuns.map(\.string).joined()
+        XCTAssertTrue(wideStr.contains("ı"))
+        XCTAssertTrue(wideStr.contains("ȷ"))
+    }
 }
