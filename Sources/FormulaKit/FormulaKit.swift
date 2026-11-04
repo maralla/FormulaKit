@@ -168,13 +168,36 @@ public struct FormulaKit {
         }
     }
 
+    /// Lays out a LaTeX math expression into positioned glyph runs, decoration vector paths,
+    /// and the root ``Box`` sizing metrics.
+    public static func layout(
+        _ expression: String,
+        options: Options = .default
+    ) throws -> MathCompositeLayout {
+        try render(expression, options: options)
+    }
+
+    /// Parses, lays out, and renders a LaTeX math expression into any external ``MathRenderBackend``
+    /// (such as Metal, CoreAnimation, CoreGraphics, or SVG).
+    public static func render<B: MathRenderBackend>(
+        _ expression: String,
+        options: Options = .default,
+        into backend: inout B
+    ) throws {
+        let compositeLayout = try layout(expression, options: options)
+        compositeLayout.render(into: &backend)
+    }
+
+    /// Renders an already laid-out ``MathCompositeLayout`` into any external ``MathRenderBackend``.
+    public static func render<B: MathRenderBackend>(
+        _ layout: MathCompositeLayout,
+        into backend: inout B
+    ) {
+        layout.render(into: &backend)
+    }
+
     /// Render a LaTeX math expression: text runs for glyphs plus a vector path for rules, braces, etc.,
     /// and the root ``Box`` for sizing—built in one layout pass.
-    /// - Parameters:
-    ///   - expression: The LaTeX math expression to render.
-    ///   - options: Options for controlling the rendering.
-    /// - Returns: Drawable layout (see ``MathCompositeLayout/drawMath(in:textColor:)``).
-    /// - Throws: ParseError if the expression couldn't be parsed.
     public static func render(
         _ expression: String,
         options: Options = .default

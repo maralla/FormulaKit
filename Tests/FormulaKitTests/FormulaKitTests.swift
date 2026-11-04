@@ -365,7 +365,32 @@ final class FormulaKitTests: XCTestCase {
         ctx.scaleBy(x: supersample, y: supersample)
         ctx.translateBy(x: -bounds.midX, y: -bounds.midY)
 
-        layout.drawMath(in: ctx, textColor: .black)
+        ctx.setFillColor(CGColor.black)
+        ctx.addPath(layout.decorationPath.cgPath)
+        ctx.fillPath()
+        for run in layout.textRuns {
+            let ctFont = SymbolNode.ctFontForMathGlyph(
+                fontName: run.fontName,
+                character: run.string,
+                fontSize: run.fontSize,
+                metricsTextMode: run.metricsTextMode,
+                mathFont: layout.mathFont
+            )
+            var attrs: [NSAttributedString.Key: Any] = [
+                .font: ctFont as NSFont,
+                kCTForegroundColorAttributeName as NSAttributedString.Key: CGColor.black,
+            ]
+            if let gn = run.openTypeMathGlyphName,
+                let glyphInfo = CTGlyphInfoCreateWithGlyphName(gn as CFString, ctFont, run.string as CFString)
+            {
+                attrs[kCTGlyphInfoAttributeName as NSAttributedString.Key] = glyphInfo
+            }
+            let line = CTLineCreateWithAttributedString(
+                NSAttributedString(string: run.string, attributes: attrs) as CFAttributedString
+            )
+            ctx.textPosition = CGPoint(x: run.baselineOrigin.x, y: run.baselineOrigin.y)
+            CTLineDraw(line, ctx)
+        }
 
         let mathToDevice = ctx.ctm
         let yMid = runDown.baselineOrigin.y

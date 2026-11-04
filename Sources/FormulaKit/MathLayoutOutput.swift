@@ -338,4 +338,40 @@ public struct MathCompositeLayout {
     public var composite: MathCompositeRender {
         MathCompositeRender(decorationPath: decorationPath, textRuns: textRuns)
     }
+
+    /// Drives any external ``MathRenderBackend`` renderer with this layout's
+    /// decoration paths and positioned glyph text runs.
+    public func render<B: MathRenderBackend>(into backend: inout B) {
+        backend.beginMath(rootBox: rootBox, mathFont: mathFont)
+        if !decorationPath.elements.isEmpty {
+            backend.fillMathPath(decorationPath)
+        }
+        for run in textRuns {
+            backend.drawMathTextRun(run, mathFont: mathFont)
+        }
+        backend.endMath()
+    }
+}
+
+/// Abstract 2D rendering backend for drawing a laid-out ``MathCompositeLayout``.
+///
+/// Implement `MathRenderBackend` to render FormulaKit's laid-out math expressions
+/// into custom targets such as Metal, CoreAnimation, CoreGraphics, or SVG.
+public protocol MathRenderBackend {
+    /// Called at the start of rendering with the root layout box (`width`, `height` above baseline, `depth` below baseline).
+    mutating func beginMath(rootBox: Box, mathFont: MathFontIdentifier)
+
+    /// Fills a decoration path (fraction bars, radical vinculums, stretchy braces) in math layout coordinates (y-up, baseline at y = 0).
+    mutating func fillMathPath(_ path: MathPath)
+
+    /// Draws a positioned math glyph text run in math layout coordinates (`run.baselineOrigin`, y-up).
+    mutating func drawMathTextRun(_ run: MathTextRun, mathFont: MathFontIdentifier)
+
+    /// Called after all decoration paths and text runs have been emitted.
+    mutating func endMath()
+}
+
+extension MathRenderBackend {
+    public mutating func beginMath(rootBox: Box, mathFont: MathFontIdentifier) {}
+    public mutating func endMath() {}
 }

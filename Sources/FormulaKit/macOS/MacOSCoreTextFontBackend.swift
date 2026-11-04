@@ -4,6 +4,26 @@ import CoreGraphics
 import CoreText
 import Foundation
 
+extension MathPath {
+    /// Converts this ``MathPath`` to a Core Graphics ``CGPath``.
+    public var cgPath: CGPath {
+        let path = CGMutablePath()
+        for el in elements {
+            switch el {
+            case .moveTo(let p):
+                path.move(to: p)
+            case .lineTo(let p):
+                path.addLine(to: p)
+            case .quadTo(let c, let p):
+                path.addQuadCurve(to: p, control: c)
+            case .closeSubpath:
+                path.closeSubpath()
+            }
+        }
+        return path
+    }
+}
+
 /// Core Text implementation of ``MathFontBackend``.
 public struct MacOSCoreTextFontBackend: MathFontBackend {
     public init() {

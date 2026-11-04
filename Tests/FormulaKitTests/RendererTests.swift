@@ -29,4 +29,28 @@ final class RendererTests: XCTestCase {
         XCTAssertFalse(layout.textRuns.isEmpty)
         XCTAssertGreaterThan(layout.rootBox.width, 0)
     }
+
+    func testExternalMathRenderBackend() throws {
+        struct RecordingMathRenderer: MathRenderBackend {
+            var rootWidth: CGFloat = 0
+            var pathCount = 0
+            var runs: [MathTextRun] = []
+
+            mutating func beginMath(rootBox: Box, mathFont: MathFontIdentifier) {
+                rootWidth = rootBox.width
+            }
+            mutating func fillMathPath(_ path: MathPath) {
+                pathCount += 1
+            }
+            mutating func drawMathTextRun(_ run: MathTextRun, mathFont: MathFontIdentifier) {
+                runs.append(run)
+            }
+        }
+
+        var backend = RecordingMathRenderer()
+        try FormulaKit.render(#"\frac{x^2 + 1}{\sqrt{y}}"#, into: &backend)
+        XCTAssertGreaterThan(backend.rootWidth, 0)
+        XCTAssertEqual(backend.pathCount, 1)
+        XCTAssertFalse(backend.runs.isEmpty)
+    }
 }
