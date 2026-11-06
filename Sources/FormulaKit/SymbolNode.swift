@@ -96,13 +96,12 @@ public struct SymbolNode: LayoutNode {
         }
 
         let bounds = glyphData.boundingBox
-        let axisHeight = fm.axisHeight * fontSize
-
-        var yOffset: CGFloat = 0
-        if type == .mbin || type == .mrel || type == .mop {
-            let midY = (bounds.minY + bounds.maxY) / 2
-            yOffset = axisHeight - midY
-        }
+        let yOffset = Self.axisYOffset(
+            fontSize: fontSize,
+            type: type,
+            character: character,
+            glyphBounds: bounds
+        )
 
         let height = max(0, bounds.maxY + yOffset)
         let depth = max(0, -(bounds.minY + yOffset))
@@ -215,11 +214,15 @@ public struct SymbolNode: LayoutNode {
     private static func axisYOffset(
         fontSize: CGFloat,
         type: AtomType,
+        character: String,
         glyphBounds: CGRect
     ) -> CGFloat {
         let fm = FontMetrics.getMetrics(for: fontSize)
         let axis = fm.axisHeight * fontSize
         guard type == .mbin || type == .mrel || type == .mop else { return 0 }
+        if type == .mop, let sc = character.unicodeScalars.first, sc.value <= 0x007E {
+            return 0
+        }
         let midY = (glyphBounds.minY + glyphBounds.maxY) / 2
         return axis - midY
     }
@@ -277,6 +280,7 @@ public struct SymbolNode: LayoutNode {
         let yOffset = Self.axisYOffset(
             fontSize: fontSize,
             type: type,
+            character: character,
             glyphBounds: glyphBounds
         )
         let baseline = CGPoint(x: origin.x, y: origin.y + yOffset)
