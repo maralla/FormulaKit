@@ -30,7 +30,7 @@ public struct MacOSCoreTextFontBackend: MathFontBackend {
         Self.ensureBundledFeiRegistered()
     }
 
-    private static let bundledCGFont: CGFont? = {
+    private nonisolated(unsafe) static let bundledCGFont: CGFont? = {
         guard let url = FeiMath.bundledFontURL else { return nil }
         CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
         guard let provider = CGDataProvider(url: url as CFURL) else { return nil }
